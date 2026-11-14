@@ -1,0 +1,900 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Re:Wear</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Manrope:wght@700;800&display=swap">
+<style>
+/* Layout: hang-tag and care-label vernacular. Dashed "stitch" borders mark verification and price; one cobalt accent, green only for verified. */
+:root{
+  --bg:#F4F5F2; --surface:#FFFFFF; --ink:#15171C; --muted:#5C626D; --line:#D6D9D0; --tile:#E8EAE3;
+  --accent:#1F4BFF; --accent-ink:#FFFFFF;
+  --ok:#0F7A55; --ok-bg:#DDF2E8; --warn:#8F5600; --warn-bg:#FBEBC8; --bad:#B3261E; --bad-bg:#F9DDDA;
+  --display:"Manrope","Inter",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101216; --surface:#181B21; --ink:#EEF0F3; --muted:#9AA1AD; --line:#2A2F38; --tile:#20242C;
+  --accent:#7C98FF; --accent-ink:#0B1020;
+  --ok:#5FD3A2; --ok-bg:#12332A; --warn:#F0B95A; --warn-bg:#3A2D10; --bad:#FF8F86; --bad-bg:#3C1815; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101216; --surface:#181B21; --ink:#EEF0F3; --muted:#9AA1AD; --line:#2A2F38; --tile:#20242C;
+  --accent:#7C98FF; --accent-ink:#0B1020;
+  --ok:#5FD3A2; --ok-bg:#12332A; --warn:#F0B95A; --warn-bg:#3A2D10; --bad:#FF8F86; --bad-bg:#3C1815; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);padding-bottom:48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 24px;padding-block:10px}
+.logo{font:800 24px var(--display);text-decoration:none;letter-spacing:-.02em}
+.logo span{color:var(--accent);font-family:var(--mono);font-weight:600;padding:0 1px}
+nav{display:flex;gap:4px;order:3;flex-basis:100%;overflow-x:auto}
+nav a{white-space:nowrap;text-decoration:none;font-weight:600;font-size:14px;padding:6px 12px;border-radius:8px;color:var(--muted)}
+nav a[aria-current=page]{background:var(--ink);color:var(--bg)}
+nav .n{display:inline-block;min-width:18px;margin-left:6px;padding:1px 5px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font:600 11px/16px var(--mono);text-align:center}
+.ctl{display:flex;gap:8px;margin-left:auto}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:5px 9px;font:600 12px var(--mono)}
+.seg svg{display:block;width:15px;height:15px}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+@media(min-width:760px){nav{order:0;flex-basis:auto}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:32px;align-items:center;padding-block:40px 28px}
+.hero h1{font-size:clamp(30px,5vw,50px);letter-spacing:-.025em;margin-block:10px 14px}
+.hero p.lead{max-width:52ch;color:var(--muted);font-size:16px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:10px 16px;border-radius:8px;font-weight:600;text-decoration:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.label-card{background:var(--surface);border:1.5px dashed var(--ink);border-radius:6px;padding:20px;display:grid;gap:14px;position:relative}
+.label-card::before{content:"";position:absolute;top:-9px;left:24px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:1.5px dashed var(--ink)}
+.label-card h2{font-size:17px}
+.rows{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.rows li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted var(--line);padding-bottom:8px}
+.rows li span:last-child{color:var(--ok);font-weight:600}
+.rows li span:last-child::before{content:"✓ "}
+.verdict{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.verdict strong{font:800 34px var(--display);letter-spacing:-.02em}
+
+/* meter */
+.meter{min-width:0}
+.track{position:relative;height:8px;border-radius:99px;background:var(--tile)}
+.track i{display:block;height:100%;border-radius:99px;background:var(--ok)}
+.track i.warn{background:var(--warn)} .track i.bad{background:var(--bad)}
+.track b{position:absolute;top:-3px;width:2px;height:14px;background:var(--ink);opacity:.45}
+.scale{position:relative;height:16px;margin-top:6px;font:11px var(--mono);color:var(--muted)}
+.scale span{position:absolute;transform:translateX(-50%)}
+.scale span:first-child{transform:none}
+.note{font-size:13px;color:var(--muted)}
+
+/* sections */
+.section{padding-block:28px}
+.section>h2,.head h2{font-size:clamp(24px,3.4vw,32px);letter-spacing:-.02em}
+.head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;margin-bottom:18px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.tools input,.tools select{min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{border:1px solid var(--line);background:var(--surface);padding:6px 13px;border-radius:999px;font-weight:600;font-size:13px}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+textarea{display:block;min-height:96px;resize:vertical;line-height:1.5}
+.desc{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}
+input[type=text],input[type=number],input[type=search],select,textarea{width:100%;border:1px solid var(--line);background:var(--surface);padding:10px 12px;border-radius:8px;font-size:16px}
+.tools input{flex:1 1 200px;width:auto}.tools select{flex:0 1 220px;width:auto}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px}
+.card{display:flex;flex-direction:column;text-align:left;padding:0;border:1px solid var(--line);background:var(--surface);border-radius:10px;overflow:hidden;min-width:0}
+.card:hover{border-color:var(--accent)}
+.art{background:var(--tile);aspect-ratio:1/1;display:grid;place-items:center;color:var(--ink)}
+.art svg{width:62%;height:62%}
+.cbody{display:grid;gap:6px;padding:12px 14px 14px;min-width:0}
+.cbody h3{font-size:16px}
+.meta{font-size:13px;color:var(--muted)}
+.price{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin-top:2px}
+.price b{font:800 19px var(--display)}
+.price small{font:12px var(--mono);color:var(--muted)}
+.badge{justify-self:start;display:inline-block;font:600 10.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:5px 7px;border:1px dashed currentColor;border-radius:4px}
+.badge.ok{color:var(--ok);background:var(--ok-bg)}
+.badge.ex{color:var(--accent);background:var(--tile)}
+
+/* forms */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px}
+.field{display:grid;gap:6px;min-width:0}
+.field>span{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));gap:12px}
+.slot{position:relative;display:grid;gap:6px;font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.slot input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.slot .img{aspect-ratio:1/1;border:1.5px dashed var(--line);border-radius:8px;background:var(--tile) center/cover no-repeat;display:grid;place-items:center;font-size:12px}
+.slot:focus-within .img{outline:2px solid var(--accent);outline-offset:2px}
+.slot.filled .img{border-style:solid;border-color:var(--ok)}
+.slot.filled .img span{display:none}
+.pricebox{border:1.5px dashed var(--ink);border-radius:8px;padding:14px 16px;display:grid;gap:8px;margin-top:2px}
+.pricebox div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;align-items:baseline}
+.pricebox b{font:800 20px var(--display)}
+.pricebox .you b{font-size:16px;color:var(--muted)}
+.err{color:var(--bad);font-size:14px;min-height:20px}
+.sellbar{display:flex;flex-wrap:wrap;align-items:end;gap:14px}
+.sellbar .field{flex:0 1 220px}
+.sellbar .btn{flex:1 1 220px}
+
+/* ai result */
+.run{display:grid;gap:12px;margin-top:18px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.steps li{display:flex;gap:10px;align-items:center;color:var(--muted)}
+.steps li.done{color:var(--ink)}
+.dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin .8s linear infinite;flex:none}
+.steps li.done .dot{animation:none;border:0;background:var(--ok);position:relative}
+.steps li.done .dot::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:var(--surface);font-size:11px;font-weight:700}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.dot{animation:none}}
+.result{border-radius:10px;padding:16px;display:grid;gap:10px;border:1px solid currentColor}
+.result.ok{background:var(--ok-bg);color:var(--ok)} .result.warn{background:var(--warn-bg);color:var(--warn)} .result.bad{background:var(--bad-bg);color:var(--bad)}
+.result h3{font-size:19px}
+.result p,.result li{color:var(--ink)}
+.result ul{margin:0;padding-left:18px;display:grid;gap:2px}
+.result .row{display:flex;flex-wrap:wrap;gap:10px}
+
+/* how */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}
+.cols .panel{display:grid;gap:8px;align-content:start}
+.cols h3{font-size:18px}
+.example{margin-top:16px;border:1.5px dashed var(--ink);border-radius:8px;padding:14px 16px;font-weight:600}
+
+/* review */
+.queue{display:grid;gap:16px}
+.qitem{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.thumbs img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+.thumbs .art{grid-column:1/-1;aspect-ratio:2/1;border-radius:6px}
+.thumbs .art svg{height:70%}
+.qinfo{display:grid;gap:10px;align-content:start;min-width:0}
+.qinfo ul{margin:0;padding-left:18px;color:var(--ink)}
+.qact{display:flex;flex-wrap:wrap;gap:10px}
+
+/* modal */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(10,12,16,.6);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal{position:relative;width:100%;max-width:760px;max-height:100%;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:22px}
+.mclose{position:absolute;top:10px;right:10px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 10px;font-weight:600;font-size:13px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:20px;margin-top:14px}
+.mgrid>div{display:grid;gap:12px;align-content:start;min-width:0}
+.mgrid .art{border-radius:10px}
+.glist{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px}
+.glist li::before{content:"✓ ";color:var(--ok);font-weight:700}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px;margin:0}
+.kv dt{color:var(--muted)}.kv dd{margin:0}
+.big{font:800 28px var(--display);letter-spacing:-.02em}
+.tl{list-style:none;margin:16px 0;padding:0;display:grid;gap:0}
+.tl li{position:relative;padding:0 0 18px 30px;color:var(--muted)}
+.tl li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:var(--bg)}
+.tl li::after{content:"";position:absolute;left:6px;top:20px;bottom:0;border-left:2px dashed var(--line)}
+.tl li:last-child::after{display:none}
+.tl li.done{color:var(--ink)}
+.tl li.done::before{background:var(--ok);border-color:var(--ok)}
+.tl li.cur{color:var(--ink);font-weight:600}
+.tl li.cur::before{border-color:var(--accent)}
+
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;margin-bottom:16px;align-items:end}
+.filters .btn{padding:10px 12px}
+.chat-head{display:flex;gap:12px;align-items:center;padding-right:76px}
+.chat-head .art,.crow .art{width:56px;height:56px;aspect-ratio:auto;border-radius:8px;flex:none}
+.chat-head .art svg,.crow .art svg{width:70%;height:70%}
+.thread{display:grid;gap:8px;max-height:min(46vh,340px);overflow:auto;padding:4px 2px;margin:14px 0}
+.msg{max-width:82%;padding:8px 12px;border-radius:12px;font-size:14px;overflow-wrap:anywhere}
+.msg.me{justify-self:end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:4px}
+.msg.them{justify-self:start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg time{display:block;font:10px var(--mono);opacity:.7;margin-top:2px}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.cform{display:flex;gap:8px}
+.cform input{flex:1;min-width:0}
+.clist{display:grid;gap:10px}
+.crow{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.crow:hover{border-color:var(--accent)}
+.crow .t{min-width:0;flex:1}
+.crow p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.udot{width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none}
+.cw{position:relative;display:flex;min-width:0}
+.cw .card{width:100%}
+.fav{position:absolute;top:8px;right:8px;z-index:2;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--ink);padding:0}
+.fav svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.fav[aria-pressed=true]{color:var(--bad)}
+.fav[aria-pressed=true] svg{fill:currentColor}
+.art.ph{overflow:hidden}
+.art.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.gthumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.gt{padding:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface);aspect-ratio:1/1}
+.gt img{width:100%;height:100%;object-fit:cover;display:block}
+.rate{font:12px var(--mono);color:var(--muted)}
+.badge.sd{color:var(--warn);background:var(--warn-bg)}
+.stars{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.star{width:44px;height:44px;border:1px solid var(--line);background:var(--surface);border-radius:8px;font-size:20px;color:var(--warn);padding:0}
+.star:hover{border-color:var(--accent)}
+.mrow{display:grid;grid-template-columns:88px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.mrow .art{width:88px;height:88px;aspect-ratio:auto;border-radius:8px}
+.minfo{display:grid;gap:6px;min-width:0;align-content:start}
+.minfo h3{font-size:16px}
+.mact{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mact .pin{width:110px;padding:8px 10px}
+.mact .btn{padding:8px 12px;font-size:14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;max-width:calc(100% - 32px)}
+footer{border-top:1px solid var(--line);margin-top:24px;padding-block:20px;display:grid;gap:6px}
+</style>
+
+<header class="top"><div class="wrap bar">
+  <a class="logo" href="#catalog">Re<span>:</span>Wear</a>
+  <nav id="nav" aria-label="Menu">
+    <a href="#catalog" data-v="catalog" data-i18n="nav_catalog"></a>
+    <a href="#sell" data-v="sell" data-i18n="nav_sell"></a>
+    <a href="#mine" data-v="mine" data-i18n="nav_mine"></a>
+    <a href="#favs" data-v="favs"><span data-i18n="nav_favs"></span><span class="n" id="fn" hidden>0</span></a>
+    <a href="#how" data-v="how" data-i18n="nav_how"></a>
+    <a href="#review" data-v="review"><span data-i18n="nav_review"></span><span class="n" id="qn">0</span></a>
+    <a href="#chats" data-v="chats"><span data-i18n="nav_chats"></span><span class="n" id="cn" hidden>0</span></a>
+  </nav>
+  <div class="ctl">
+    <div class="seg" id="langSeg" role="group" aria-label="Language"><button data-lang="ru" aria-pressed="true">RU</button><button data-lang="ro" aria-pressed="false">RO</button><button data-lang="en" aria-pressed="false">EN</button></div>
+    <div class="seg" id="themeSeg" role="group"><button data-theme="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button data-theme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button></div>
+    <div class="seg" id="curSeg" role="group" aria-label="Currency"><button data-cur="MDL" aria-pressed="true">MDL</button><button data-cur="PRB" aria-pressed="false">PRB</button></div>
+  </div>
+</div></header>
+
+<main>
+<!-- CATALOG -->
+<section id="v-catalog" class="wrap">
+  <div class="hero">
+    <div>
+      <p class="mono muted" data-i18n="tagline"></p>
+      <h1 data-i18n="hero_h"></h1>
+      <p class="lead" data-i18n="hero_p"></p>
+      <div class="cta"><a class="btn primary" href="#grid-top" data-i18n="cta_browse"></a><a class="btn" href="#sell" data-i18n="cta_sell"></a></div>
+    </div>
+    <div class="label-card" aria-label="Sample report">
+      <p class="mono muted" data-i18n="rep_t"></p>
+      <h2>Levi's 501</h2>
+      <ul class="rows">
+        <li><span data-i18n="chk_label"></span><span data-i18n="match"></span></li>
+        <li><span data-i18n="chk_inner"></span><span data-i18n="match"></span></li>
+        <li><span data-i18n="chk_hw"></span><span data-i18n="match"></span></li>
+      </ul>
+      <div class="verdict"><span class="mono muted" data-i18n="m_score"></span><strong>97%</strong></div>
+      <div class="meter"><div class="track"><i style="width:97%"></i><b style="left:55%"></b><b style="left:85%"></b></div><div class="scale"><span>0</span><span style="left:55%">55</span><span style="left:85%">85</span></div></div>
+      <p class="note" data-i18n="meter_note"></p>
+    </div>
+  </div>
+  <div class="section" id="grid-top" style="padding-top:12px">
+    <div class="head"><h2 data-i18n="cat_title"></h2><p class="muted" id="count"></p></div>
+    <div class="tools">
+      <input id="q" type="search" data-i18n-ph="search_ph" autocomplete="off">
+      <select id="sort" aria-label="Sort"></select>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="filters">
+      <label class="field"><span data-i18n="fl_gender"></span><select id="fGender"></select></label>
+      <label class="field"><span data-i18n="f_size"></span><input id="fSize" type="text" autocomplete="off"></label>
+      <label class="field"><span id="fMinL"></span><input id="fMin" type="number" min="0" inputmode="numeric"></label>
+      <label class="field"><span id="fMaxL"></span><input id="fMax" type="number" min="0" inputmode="numeric"></label>
+      <button class="btn" id="fReset" type="button" data-i18n="fl_reset"></button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <p class="note" style="margin-top:16px" data-i18n="examples_note"></p>
+  </div>
+</section>
+
+<!-- SELL -->
+<section id="v-sell" class="wrap section" hidden>
+  <div class="head"><div><h2 data-i18n="sl_title"></h2><p class="muted" data-i18n="sl_sub"></p></div></div>
+  <form id="form" class="panel" novalidate style="display:grid;gap:18px">
+    <div class="fgrid">
+      <label class="field"><span data-i18n="f_brand"></span><input id="brand" type="text" autocomplete="off" placeholder="Levi's, Nike, Zara"></label>
+      <label class="field"><span data-i18n="f_type"></span><select id="type"></select></label>
+      <label class="field"><span data-i18n="f_gender"></span><select id="gender"></select></label>
+      <label class="field"><span data-i18n="f_size"></span><input id="size" type="text" autocomplete="off" placeholder="M, W32/L32, EU 42"></label>
+      <label class="field"><span data-i18n="f_cond"></span><select id="cond"></select></label>
+      <label class="field"><span data-i18n="f_city"></span><select id="scity"></select></label>
+      <label class="field"><span data-i18n="f_price"></span><input id="price" type="number" min="1" step="1" inputmode="numeric" placeholder="500"></label>
+    </div>
+    <label class="field"><span data-i18n="f_desc"></span><textarea id="desc" maxlength="600" rows="4" data-i18n-ph="desc_ph"></textarea></label>
+    <div class="pricebox" aria-live="polite">
+      <div><span class="mono muted" data-i18n="pr_buyer"></span><b id="pbuyer">—</b></div>
+      <div class="you"><span class="mono muted" data-i18n="pr_you"></span><b id="pyou">—</b></div>
+      <p class="note" data-i18n="pr_note"></p>
+    </div>
+    <div class="field"><span data-i18n="f_photos"></span>
+      <div class="slots">
+        <label class="slot"><div class="img"><span data-i18n="add_photo"></span></div><span data-i18n="p1"></span><input type="file" accept="image/*" data-slot="0"></label>
+        <label class="slot"><div class="img"><span data-i18n="add_photo"></span></div><span data-i18n="p2"></span><input type="file" accept="image/*" data-slot="1"></label>
+        <label class="slot"><div class="img"><span data-i18n="add_photo"></span></div><span data-i18n="p3"></span><input type="file" accept="image/*" data-slot="2"></label>
+        <label class="slot"><div class="img"><span data-i18n="add_photo"></span></div><span data-i18n="p4"></span><input type="file" accept="image/*" data-slot="3"></label>
+      </div>
+    </div>
+    <p class="err" id="err" role="alert"></p>
+    <div class="sellbar">
+      <label class="field"><span data-i18n="demo_sel"></span><select id="demo"></select></label>
+      <button class="btn primary" id="submit" type="submit" data-i18n="submit"></button>
+    </div>
+    <p class="note" data-i18n="demo_note"></p>
+  </form>
+  <div class="run" id="run" aria-live="polite"></div>
+</section>
+
+<!-- HOW -->
+<section id="v-how" class="wrap section" hidden>
+  <h2 data-i18n="how_title" style="margin-bottom:18px"></h2>
+  <div class="cols">
+    <div class="panel"><p class="mono muted">1</p><h3 data-i18n="h1_t"></h3><p class="muted" data-i18n="h1_p"></p></div>
+    <div class="panel"><p class="mono muted">2</p><h3 data-i18n="h2_t"></h3><p class="muted" data-i18n="h2_p"></p></div>
+    <div class="panel"><p class="mono muted">3</p><h3 data-i18n="h3_t"></h3><p class="muted" data-i18n="h3_p"></p></div>
+  </div>
+  <p class="example" data-i18n="h_ex"></p>
+</section>
+
+<!-- MINE -->
+<section id="v-mine" class="wrap section" hidden>
+  <div class="head"><div><h2 data-i18n="mine_title"></h2><p class="muted" data-i18n="mine_sub"></p></div></div>
+  <div class="panel" id="mineSum" style="margin-bottom:16px"></div>
+  <div class="queue" id="mine"></div>
+</section>
+
+<!-- FAVS -->
+<section id="v-favs" class="wrap section" hidden>
+  <div class="head"><div><h2 data-i18n="favs_title"></h2><p class="muted" id="favCount"></p></div></div>
+  <div class="grid" id="favgrid"></div>
+</section>
+
+<!-- CHATS -->
+<section id="v-chats" class="wrap section" hidden>
+  <div class="head"><div><h2 data-i18n="chats_title"></h2><p class="muted" data-i18n="chats_sub"></p></div></div>
+  <div class="clist" id="clist"></div>
+</section>
+
+<!-- REVIEW -->
+<section id="v-review" class="wrap section" hidden>
+  <div class="head"><div><h2 data-i18n="rv_title"></h2><p class="muted" data-i18n="rv_sub"></p></div></div>
+  <div class="queue" id="queue"></div>
+</section>
+</main>
+
+<footer class="wrap">
+  <p class="muted" data-i18n="foot_region"></p>
+  <p class="note" id="rate"></p>
+</footer>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="mclose" id="mclose" type="button" data-i18n="close"></button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+"use strict";
+var RATE=0.95, FEE=0.15;
+var LANGS=["ru","ro","en"], L=0, CUR="MDL";
+try{var sl=localStorage.getItem("rw-lang");if(LANGS.indexOf(sl)>-1)L=LANGS.indexOf(sl);if(localStorage.getItem("rw-cur")==="PRB")CUR="PRB";}catch(e){}
+
+try{var savedTh=localStorage.getItem("rw-theme");if(savedTh==="dark"||savedTh==="light")document.documentElement.setAttribute("data-theme",savedTh);}catch(e){}
+function effTheme(){var a=document.documentElement.getAttribute("data-theme");if(a==="dark"||a==="light")return a;return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}
+
+var D={
+tagline:["маркетплейс одежды · Молдова и ПМР","marketplace de haine · Moldova și Transnistria","clothing marketplace · Moldova and Transnistria"],
+nav_catalog:["Каталог","Catalog","Browse"],nav_sell:["Продать","Vinde","Sell"],nav_how:["Как это работает","Cum funcționează","How it works"],nav_review:["Эксперт","Expert","Expert"],
+hero_h:["Вещи с проверкой подлинности","Haine cu autenticitate verificată","Clothes with verified authenticity"],
+hero_p:["ИИ сверяет фотографии каждой вещи с признаками оригинала. Если уверенности мало, фотографии смотрит эксперт. Продавец получает деньги только после того, как вы получили заказ.","AI-ul compară fotografiile fiecărui articol cu semnele originalului. Dacă nu e sigur, fotografiile ajung la un expert. Vânzătorul primește banii abia după ce ai primit comanda.","AI compares photos of every item with the marks of the original. If it is unsure, a person reviews the photos. The seller is paid only after you receive the order."],
+cta_browse:["Смотреть каталог","Vezi catalogul","Browse catalog"],cta_sell:["Продать вещь","Vinde un articol","Sell an item"],
+rep_t:["Пример отчёта проверки","Exemplu de raport de verificare","Sample verification report"],
+chk_label:["Наружная бирка","Eticheta exterioară","Outer label"],chk_inner:["Внутренний ярлык","Eticheta interioară","Inner label"],chk_hw:["Фурнитура и строчка","Accesorii și cusături","Hardware and stitching"],
+match:["совпадает","se potrivește","matches"],
+meter_note:["Выше 85: публикуем. От 55 до 85: решает эксперт. Ниже 55: нужны новые фотографии.","Peste 85: publicăm. Între 55 și 85: decide un expert. Sub 55: sunt necesare fotografii noi.","Above 85: published. 55 to 85: an expert decides. Below 55: new photos needed."],
+cat_title:["Каталог","Catalog","Catalog"],search_ph:["Бренд или вещь","Brand sau articol","Brand or item"],
+c_all:["Все","Toate","All"],c_tops:["Верх","Partea de sus","Tops"],c_bottoms:["Низ","Partea de jos","Bottoms"],c_outer:["Куртки","Geci","Outerwear"],c_shoes:["Обувь","Încălțăminte","Shoes"],c_dress:["Платья","Rochii","Dresses"],
+sort_new:["Сначала новые","Mai noi întâi","Newest first"],sort_asc:["Сначала дешевле","Mai ieftine întâi","Price: low to high"],sort_desc:["Сначала дороже","Mai scumpe întâi","Price: high to low"],
+found:["Найдено: {n}","Găsite: {n}","Found: {n}"],none:["Ничего не найдено.","Nu s-a găsit nimic.","Nothing found."],
+examples_note:["Вещи в каталоге — примеры для демонстрации.","Articolele din catalog sunt exemple demonstrative.","Items in the catalog are demo examples."],
+ty_tee:["Футболка","Tricou","T-shirt"],ty_hoodie:["Худи","Hanorac","Hoodie"],ty_jeans:["Джинсы","Blugi","Jeans"],ty_jacket:["Куртка","Geacă","Jacket"],ty_sneakers:["Кроссовки","Adidași","Sneakers"],ty_dress:["Платье","Rochie","Dress"],
+cond_new:["Новая с биркой","Nouă, cu etichetă","New with tag"],cond_great:["Отличное","Excelentă","Excellent"],cond_good:["Хорошее","Bună","Good"],
+b_ai:["Проверено ИИ","Verificat de AI","AI verified"],b_expert:["Проверено экспертом","Verificat de expert","Expert verified"],
+incl:["включая сервис Re:Wear 15%","include serviciul Re:Wear 15%","includes Re:Wear service fee 15%"],
+m_verif:["Проверка подлинности","Verificarea autenticității","Authenticity check"],m_score:["Уверенность ИИ","Încrederea AI","AI confidence"],
+m_ai:["ИИ подтвердил подлинность по фотографиям. Ручная проверка не потребовалась.","AI-ul a confirmat autenticitatea după fotografii. Verificarea manuală nu a fost necesară.","AI confirmed authenticity from the photos. No manual review was needed."],
+m_ex:["ИИ сомневался, поэтому фотографии проверил эксперт Re:Wear и подтвердил подлинность.","AI-ul a avut dubii, așa că un expert Re:Wear a verificat fotografiile și a confirmat autenticitatea.","AI had doubts, so a Re:Wear expert reviewed the photos and confirmed authenticity."],
+m_guar:["Гарантия покупки","Garanția cumpărăturii","Purchase guarantee"],
+g1:["Деньги блокируются на счёте Re:Wear до получения заказа.","Banii sunt blocați în contul Re:Wear până primești comanda.","Your money is held by Re:Wear until you receive the order."],
+g2:["После получения у вас 3 дня на осмотр вещи.","După primire ai 3 zile pentru a verifica articolul.","After delivery you have 3 days to inspect the item."],
+g3:["Если вещь не соответствует описанию или не оригинал, возвращаем всю сумму.","Dacă articolul nu corespunde descrierii sau nu e original, returnăm toată suma.","If the item does not match the description or is not original, you get a full refund."],
+buy:["Купить с гарантией","Cumpără cu garanție","Buy with guarantee"],close:["Закрыть","Închide","Close"],
+lbl_size:["Размер","Mărime","Size"],lbl_cond:["Состояние","Stare","Condition"],lbl_city:["Город","Oraș","City"],
+co_title:["Оформление заказа","Finalizarea comenzii","Checkout"],co_name:["Имя и фамилия","Nume și prenume","Full name"],co_phone:["Телефон","Telefon","Phone"],co_city:["Город доставки","Orașul de livrare","Delivery city"],
+co_note:["Деньги блокируются на счёте Re:Wear и уходят продавцу после вашего подтверждения.","Banii sunt blocați în contul Re:Wear și ajung la vânzător după confirmarea ta.","Your payment is held by Re:Wear and reaches the seller after you confirm."],
+co_pay:["Оплатить {p} (демо)","Plătește {p} (demo)","Pay {p} (demo)"],co_err:["Укажите имя и телефон.","Completează numele și telefonul.","Enter your name and phone."],
+tr_title:["Заказ оформлен","Comandă plasată","Order placed"],
+tr1:["Оплата заблокирована","Plata este blocată","Payment held"],tr2:["Продавец отправил вещь через почту Re:Wear","Vânzătorul a expediat articolul prin poșta Re:Wear","Seller shipped the item via Re:Wear post"],
+tr3:["Вы получили вещь, у вас 3 дня на осмотр","Ai primit articolul, ai 3 zile pentru verificare","You received the item, 3 days to inspect"],tr4:["Деньги выплачены продавцу","Banii au fost plătiți vânzătorului","Seller paid out"],
+tr_ship:["Продавец отправил (демо)","Vânzătorul a expediat (demo)","Seller shipped (demo)"],tr_recv:["Я получил вещь (демо)","Am primit articolul (demo)","I received it (demo)"],
+tr_ok:["Всё в порядке, выплатить продавцу","Totul e în regulă, plătește vânzătorul","All good, pay the seller"],tr_bad:["Вещь не соответствует, вернуть деньги","Articolul nu corespunde, returnează banii","Item does not match, refund me"],
+tr_done:["Сделка завершена. Продавец получил оплату.","Tranzacție încheiată. Vânzătorul a primit plata.","Deal complete. The seller has been paid."],
+tr_refund:["Деньги возвращены вам полностью. Вещь отправлена на экспертную проверку.","Banii v-au fost returnați integral. Articolul a fost trimis la verificare de către expert.","Your money was fully refunded. The item was sent for expert review."],
+sl_title:["Продать вещь","Vinde un articol","Sell an item"],sl_sub:["Загрузите 4 фотографии. ИИ проверит подлинность за несколько секунд.","Încarcă 4 fotografii. AI-ul verifică autenticitatea în câteva secunde.","Upload 4 photos. AI checks authenticity in a few seconds."],
+f_brand:["Бренд (если есть)","Brand (dacă există)","Brand (if any)"],f_type:["Тип вещи","Tip articol","Item type"],f_size:["Размер","Mărime","Size"],f_cond:["Состояние","Stare","Condition"],f_city:["Город","Oraș","City"],f_price:["Ваша цена, MDL","Prețul tău, MDL","Your price, MDL"],
+pr_buyer:["Покупатель увидит","Cumpărătorul va vedea","Buyer will see"],pr_you:["Вы получите","Vei primi","You receive"],
+pr_note:["К вашей цене добавляется наценка Re:Wear 15%.","La prețul tău se adaugă adaosul Re:Wear de 15%.","A 15% Re:Wear markup is added to your price."],
+f_desc:["Описание","Descriere","Description"],
+desc_ph:["Дефекты, замеры, где куплена, причина продажи, чек или бирка в комплекте","Defecte, măsurători, unde a fost cumpărat, motivul vânzării, bon sau etichetă în set","Flaws, measurements, where it was bought, reason for selling, receipt or tags included"],
+f_photos:["Фотографии","Fotografii","Photos"],p1:["Общий вид","Vedere de ansamblu","Overall"],p2:["Наружная бирка","Eticheta exterioară","Outer label"],p3:["Внутренний ярлык","Eticheta interioară","Inner label"],p4:["Фурнитура и шов","Accesorii și cusătură","Hardware and seam"],
+add_photo:["Добавить","Adaugă","Add"],submit:["Отправить на проверку","Trimite la verificare","Submit for check"],
+demo_sel:["Демо: результат ИИ","Demo: rezultat AI","Demo: AI result"],d_auto:["Авто","Auto","Auto"],d_ok:["Уверен","Sigur","Confident"],d_doubt:["Сомневается","Are dubii","Unsure"],d_bad:["Отказ","Respins","Rejected"],
+err_fields:["Заполните размер и цену и добавьте все 4 фотографии.","Completează mărimea și prețul și adaugă toate cele 4 fotografii.","Fill in size and price, and add all 4 photos."],
+demo_note:["Демо: оценка ИИ имитируется, настоящая модель подключается на сервере.","Demo: evaluarea AI este simulată, modelul real se conectează pe server.","Demo: the AI score is simulated, a real model connects on the server."],
+ai1:["Читаю бирки и надписи","Citesc etichetele și inscripțiile","Reading labels and text"],ai2:["Сверяю шрифт и логотип с эталоном","Compar fontul și logo-ul cu originalul","Matching font and logo to the original"],
+ai3:["Проверяю фурнитуру и швы","Verific accesoriile și cusăturile","Checking hardware and seams"],ai4:["Считаю уверенность","Calculez încrederea","Calculating confidence"],
+res_ok_h:["Подлинность подтверждена","Autenticitate confirmată","Authenticity confirmed"],res_ok_p:["Вещь опубликована в каталоге.","Articolul a fost publicat în catalog.","The item is published in the catalog."],
+res_d_h:["ИИ сомневается, нужна проверка человеком","AI-ul are dubii, e nevoie de verificare umană","AI is unsure, a person needs to review"],
+res_d_p:["Фотографии переданы эксперту. Вещь появится в каталоге после одобрения.","Fotografiile au fost trimise unui expert. Articolul apare în catalog după aprobare.","Photos were sent to an expert. The item appears in the catalog after approval."],
+res_b_h:["Не удалось подтвердить подлинность","Autenticitatea nu a putut fi confirmată","Authenticity could not be confirmed"],
+res_b_p:["Переснимите бирки и швы при дневном свете и отправьте снова.","Refă fotografiile etichetelor și cusăturilor la lumină naturală și trimite din nou.","Retake the labels and seams in daylight and submit again."],
+go_cat:["В каталог","La catalog","To catalog"],go_rev:["Открыть очередь эксперта","Deschide coada expertului","Open expert queue"],
+r_n1:["Фотографии чёткие, вещь соответствует описанию","Fotografiile sunt clare, articolul corespunde descrierii","Photos are clear and the item matches the description"],
+r_n2:["Состояние совпадает с заявленным","Starea corespunde cu cea declarată","Condition matches what is stated"],
+r_n3:["Признаков подделки под известный бренд нет","Nu sunt semne de imitație a unui brand cunoscut","No signs of imitating a known brand"],
+r_ok1:["Шрифт и логотип на бирке совпадают с эталоном","Fontul și logo-ul de pe etichetă corespund originalului","Font and logo on the label match the original"],
+r_ok2:["Состав и страна производства читаются","Compoziția și țara de fabricație sunt lizibile","Fabric and country of origin are legible"],
+r_ok3:["Фурнитура и строчка без отличий","Accesoriile și cusăturile nu au diferențe","Hardware and stitching show no differences"],
+r_d1:["Строчка у фурнитуры отличается от эталона","Cusătura de lângă accesorii diferă de original","Stitching near the hardware differs from the original"],
+r_d2:["Внутренний ярлык частично нечитаем","Eticheta interioară este parțial ilizibilă","Inner label is partly unreadable"],
+r_b1:["Шрифт на бирке не совпадает с эталоном","Fontul de pe etichetă nu corespunde originalului","Label font does not match the original"],
+r_b2:["Признаки подделки на фурнитуре","Semne de contrafacere la accesorii","Signs of counterfeiting on the hardware"],
+rv_title:["Очередь эксперта","Coada expertului","Expert queue"],rv_sub:["Вещи, в которых ИИ не уверен. Решение принимает человек.","Articole în care AI-ul nu e sigur. Decizia aparține unui om.","Items the AI is unsure about. A person makes the call."],
+rv_empty:["Очередь пуста.","Coada este goală.","The queue is empty."],approve:["Подтвердить","Confirmă","Approve"],reject:["Отклонить","Respinge","Reject"],
+rv_notes:["Замечания ИИ","Observațiile AI","AI notes"],rv_ex:["Пример","Exemplu","Example"],
+no_photos:["Фотографии не загружены (пример)","Fotografii neîncărcate (exemplu)","No photos uploaded (example)"],
+how_title:["Как работает Re:Wear","Cum funcționează Re:Wear","How Re:Wear works"],
+h1_t:["Проверка подлинности","Verificarea autenticității","Authenticity check"],
+h1_p:["От 85% уверенности ИИ вещь публикуется сразу. От 55% до 84% фотографии смотрит эксперт. Ниже 55% мы просим переснять фотографии.","De la 85% încredere AI articolul se publică imediat. Între 55% și 84% fotografiile ajung la un expert. Sub 55% cerem fotografii noi.","From 85% AI confidence an item is published right away. From 55% to 84% an expert reviews the photos. Below 55% we ask for new photos."],
+h2_t:["Покупателю","Cumpărătorului","For buyers"],
+h2_p:["Деньги блокируются на счёте Re:Wear. После получения у вас 3 дня на осмотр. Если вещь не соответствует описанию или не оригинал, возвращаем всю сумму.","Banii sunt blocați în contul Re:Wear. După primire ai 3 zile pentru verificare. Dacă articolul nu corespunde descrierii sau nu e original, returnăm toată suma.","Your money is held by Re:Wear. After delivery you have 3 days to inspect. If the item does not match or is not original, you get a full refund."],
+h3_t:["Продавцу","Vânzătorului","For sellers"],
+h3_p:["Вы назначаете цену, мы добавляем 15% к цене для покупателя. Вам выплачивается ровно ваша цена. Вещь вы отправляете через почту Re:Wear.","Tu stabilești prețul, noi adăugăm 15% la prețul pentru cumpărător. Primești exact prețul tău. Articolul îl expediezi prin poșta Re:Wear.","You set the price and we add 15% to the buyer price. You are paid exactly your price. You ship the item through Re:Wear post."],
+h_ex:["Пример: вы просите 1000 MDL, покупатель платит 1150 MDL, вам выплачивается 1000 MDL.","Exemplu: ceri 1000 MDL, cumpărătorul plătește 1150 MDL, tu primești 1000 MDL.","Example: you ask 1000 MDL, the buyer pays 1150 MDL, you are paid 1000 MDL."],
+foot_region:["Работаем в Молдове и Приднестровье: Кишинёв, Бельцы, Тирасполь, Бендеры, Рыбница и другие города.","Funcționăm în Moldova și în Transnistria: Chișinău, Bălți, Tiraspol, Bender, Rîbnița și alte orașe.","We serve Moldova and Transnistria: Chișinău, Bălți, Tiraspol, Bender, Rîbnița and other cities."],
+foot_rate:["Курс PRB ориентировочный: 1 MDL = {r} PRB.","Cursul PRB este orientativ: 1 MDL = {r} PRB.","The PRB rate is approximate: 1 MDL = {r} PRB."],
+t_pub:["Вещь опубликована","Articol publicat","Item published"],t_queue:["Отправлено эксперту","Trimis la expert","Sent to expert"],t_rej:["Заявка отклонена","Cerere respinsă","Request rejected"],t_appr:["Одобрено, вещь в каталоге","Aprobat, articolul e în catalog","Approved, item is in the catalog"],
+pmr:["ПМР","Transnistria","Transnistria"],
+nav_mine:["Мои объявления","Anunțurile mele","My listings"],nav_favs:["Избранное","Favorite","Favorites"],
+you:["Вы","Tu","You"],no_rating:["Нет оценок","Fără evaluări","No ratings yet"],
+fav_add:["В избранное","Adaugă la favorite","Save to favorites"],fav_del:["Убрать из избранного","Scoate din favorite","Remove from favorites"],
+fav_max:["Максимум 20 товаров в избранном. Удалите что-нибудь, чтобы добавить новое.","Maximum 20 de articole la favorite. Șterge ceva ca să adaugi altul nou.","Favorites hold up to 20 items. Remove one to add another."],
+favs_title:["Избранное","Favorite","Favorites"],favs_count:["Сохранено: {n} из {max}","Salvate: {n} din {max}","Saved: {n} of {max}"],
+favs_empty:["В избранном пока пусто. Нажмите на сердце в карточке товара.","Nu ai favorite încă. Apasă inima de pe cardul articolului.","Nothing saved yet. Tap the heart on an item."],
+mine_title:["Мои объявления","Anunțurile mele","My listings"],mine_sub:["Управляйте ценой и статусом своих вещей.","Gestionează prețul și starea articolelor tale.","Manage the price and status of your items."],
+mine_rating:["Ваш рейтинг","Evaluarea ta","Your rating"],mine_empty:["У вас пока нет объявлений. Нажмите «Продать».","Nu ai anunțuri încă. Apasă «Vinde».","You have no listings yet. Tap “Sell”."],
+st_active:["В продаже","La vânzare","On sale"],st_sold:["Продано","Vândut","Sold"],st_review:["На проверке у эксперта","La verificare la expert","With the expert"],
+pr_save:["Сохранить цену","Salvează prețul","Save price"],price_saved:["Цена обновлена","Preț actualizat","Price updated"],
+mark_sold:["Отметить проданной","Marchează ca vândut","Mark as sold"],relist:["Вернуть в продажу","Pune înapoi la vânzare","Put back on sale"],
+takedown:["Снять с продажи","Retrage de la vânzare","Remove listing"],takedown_ask:["Точно снять?","Sigur retragi?","Remove for sure?"],
+withdraw:["Отозвать заявку","Retrage cererea","Withdraw request"],removed:["Объявление снято","Anunț retras","Listing removed"],
+rated_me:["Покупатель оценил вас на {n} из 5 (демо)","Cumpărătorul te-a evaluat cu {n} din 5 (demo)","A buyer rated you {n} out of 5 (demo)"],
+rate_h:["Оцените продавца","Evaluează vânzătorul","Rate the seller"],rate_thanks:["Спасибо! Вы поставили {n} из 5.","Mulțumim! Ai dat {n} din 5.","Thanks! You gave {n} out of 5."],
+own_item:["Это ваше объявление","Acesta este anunțul tău","This is your listing"],
+th_light:["Светлая тема","Temă luminoasă","Light theme"],th_dark:["Тёмная тема","Temă întunecată","Dark theme"],
+nav_chats:["Чаты","Mesaje","Chats"],
+fl_gender:["Для кого","Pentru cine","For"],fl_gender_all:["Все","Toți","Everyone"],gn_f:["Женское","Femei","Women"],gn_m:["Мужское","Bărbați","Men"],gn_k:["Детское","Copii","Kids"],
+fl_brand:["Бренд","Brand","Brand"],fl_brand_all:["Все бренды","Toate brandurile","All brands"],fl_min:["Цена от","Preț de la","Price from"],fl_max:["Цена до","Preț până la","Price to"],fl_reset:["Сбросить","Resetează","Reset"],
+f_gender:["Для кого","Pentru cine","For"],
+chat_btn:["Написать продавцу","Scrie vânzătorului","Message seller"],seller:["Продавец","Vânzător","Seller"],
+chat_ph:["Напишите сообщение","Scrie un mesaj","Write a message"],send:["Отправить","Trimite","Send"],to_prod:["К товару","La articol","Back to item"],
+chat_safe:["Общайтесь здесь и платите только через гарантию Re:Wear: так деньги защищены.","Comunică aici și plătește doar prin garanția Re:Wear: așa banii sunt protejați.","Chat here and pay only through the Re:Wear guarantee so your money stays protected."],
+chat_demo:["Демо: ответы продавца имитируются.","Demo: răspunsurile vânzătorului sunt simulate.","Demo: seller replies are simulated."],
+new_msg:["Новое сообщение от продавца","Mesaj nou de la vânzător","New message from the seller"],
+chats_title:["Сообщения","Mesaje","Messages"],chats_sub:["Ваши вопросы продавцам.","Întrebările tale către vânzători.","Your questions to sellers."],
+chats_empty:["Пока нет переписок. Откройте товар и нажмите «Написать продавцу».","Nu ai conversații încă. Deschide un articol și apasă «Scrie vânzătorului».","No conversations yet. Open an item and tap “Message seller”."],
+cq1:["Вещь ещё продаётся?","Articolul mai este disponibil?","Is it still available?"],cq2:["Какие замеры?","Care sunt măsurătorile?","What are the measurements?"],
+cq3:["Есть дефекты?","Are defecte?","Any flaws?"],cq4:["Как отправите заказ?","Cum expediezi comanda?","How will you ship it?"],
+ca0:["Здравствуйте! Спасибо за вопрос, отвечу подробнее чуть позже.","Bună! Mulțumesc pentru întrebare, revin cu detalii puțin mai târziu.","Hi! Thanks for asking, I'll reply in detail a bit later."],
+ca1:["Да, вещь в наличии.","Da, articolul este disponibil.","Yes, it's still available."],
+ca2:["Пришлю замеры вечером, напишите, какие именно нужны.","Trimit măsurătorile seara, spune-mi care anume te interesează.","I'll send measurements this evening, tell me which ones you need."],
+ca3:["Серьёзных дефектов нет, всё видно на фото.","Nu are defecte serioase, totul se vede în fotografii.","No serious flaws, everything is visible in the photos."],
+ca4:["Отправлю через почту Re:Wear в ваш город.","Expediez prin poșta Re:Wear în orașul tău.","I'll ship it through Re:Wear post to your city."]
+};
+
+var CITIES=[{id:"chi",ru:"Кишинёв",la:"Chișinău"},{id:"bal",ru:"Бельцы",la:"Bălți"},{id:"cah",ru:"Кагул",la:"Cahul"},{id:"com",ru:"Комрат",la:"Comrat"},
+{id:"tir",ru:"Тирасполь",la:"Tiraspol",pmr:1},{id:"ben",ru:"Бендеры",la:"Bender",pmr:1},{id:"rib",ru:"Рыбница",la:"Rîbnița",pmr:1},{id:"dub",ru:"Дубоссары",la:"Dubăsari",pmr:1},{id:"slo",ru:"Слободзея",la:"Slobozia",pmr:1}];
+var CATOF={tee:"tops",hoodie:"tops",jeans:"bottoms",jacket:"outer",sneakers:"shoes",dress:"dress"};
+var COLORS={tee:"#B08A4F",hoodie:"#2B2F36",jeans:"#3E5C8A",jacket:"#D1493A",sneakers:"#E9E9E4",dress:"#2E7D6B"};
+var KNOWN=["levi","nike","adidas","zara","north face","carhartt","puma","ralph lauren","tommy","calvin klein","new balance","converse","reebok","lacoste","champion"];
+
+var S={q:"",cat:"all",fg:"all",favs:[],delAsk:null,fs:"",fmin:0,fmax:0,chats:{},chatOpen:null,sort:"new",nextId:100,order:null,modalFn:null,photos:[null,null,null,null],busy:false,
+products:[
+ {id:1,brand:"Levi's",type:"jeans",size:"W32/L32",cond:"great",city:"chi",price:650,color:"#3E5C8A",status:"ai",score:97},
+ {id:2,brand:"Nike",type:"sneakers",size:"EU 42",cond:"good",city:"tir",price:900,color:"#E9E9E4",status:"expert",score:71},
+ {id:3,brand:"Adidas",type:"hoodie",size:"M",cond:"great",city:"bal",price:480,color:"#2B2F36",status:"ai",score:94},
+ {id:4,brand:"The North Face",type:"jacket",size:"L",cond:"good",city:"chi",price:2100,color:"#D1493A",status:"expert",score:68},
+ {id:5,brand:"Zara",type:"dress",size:"S",cond:"new",city:"ben",price:320,color:"#2E7D6B",status:"ai",score:91},
+ {id:6,brand:"Carhartt",type:"tee",size:"M",cond:"great",city:"rib",price:260,color:"#B08A4F",status:"ai",score:96}],
+queue:[{id:99,brand:"Adidas",type:"sneakers",size:"EU 43",cond:"good",city:"dub",price:700,color:"#F1F1EE",score:63,reasons:["r_d1","r_d2"],photos:[],example:true}]
+};
+
+var GENDER={1:"m",2:"m",3:"f",4:"m",5:"f",6:"m"};
+var SELLER={1:"s1",2:"s2",3:"s3",4:"s1",5:"s4",6:"s2"};
+var SELLERS={s1:{name:"Ion M.",sum:110,count:23},s2:{name:"Elena V.",sum:55,count:12},s3:{name:"Andrei C.",sum:150,count:31},s4:{name:"Maria T.",sum:37,count:8},me:{sum:0,count:0}};
+var FAV_MAX=20;
+S.products.forEach(function(p){p.gender=GENDER[p.id];p.seller=SELLER[p.id]});
+S.queue.forEach(function(q){q.gender="m";q.seller="s3"});
+
+function $(s,r){return (r||document).querySelector(s)}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function t(k,v){var s=(D[k]||[k,k,k])[L];if(v)for(var x in v)s=s.replace("{"+x+"}",v[x]);return s}
+function nf(){return new Intl.NumberFormat(LANGS[L])}
+function fmt(m,c){return c==="MDL"?nf().format(Math.round(m))+" MDL":nf().format(Math.round(m*RATE))+" PRB"}
+function money(m){return fmt(m,CUR)}
+function money2(m){return fmt(m,CUR==="MDL"?"PRB":"MDL")}
+function buyer(p){return Math.round(p*(1+FEE))}
+function cityName(id){var c=CITIES.filter(function(x){return x.id===id})[0];if(!c)return"";var n=L===0?c.ru:c.la;return c.pmr?n+" ("+t("pmr")+")":n}
+
+function art(type,color){
+ var P={
+  tee:'<path d="M30 18 42 13Q50 22 58 13L70 18 88 34 77 46 69 40V86H31V40L23 46 12 34Z"/>',
+  hoodie:'<path d="M28 20 40 14Q50 24 60 14L72 20 92 70 80 75 70 46V88H30V46L20 75 8 70Z"/><path fill="none" d="M40 14Q50 5 60 14M38 66H62V80H38Z"/>',
+  jacket:'<path d="M28 20 40 14Q50 24 60 14L72 20 92 70 80 75 70 46V88H30V46L20 75 8 70Z"/><path fill="none" d="M50 22V88M40 14 50 26 60 14"/>',
+  jeans:'<path d="M30 10H70L77 90H54L50 36 46 90H23Z"/><path fill="none" d="M30 18H70M50 18V36"/>',
+  sneakers:'<path d="M8 64V50Q30 48 38 36L50 42Q62 52 80 54Q94 56 94 68V74H8Z"/><path fill="none" d="M8 66H94M42 44 48 50M50 48 56 54"/>',
+  dress:'<path d="M38 10H62L60 32 74 90H26L40 32Z"/><path fill="none" d="M40 32H60"/>'};
+ return '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="'+color+'" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">'+(P[type]||P.tee)+'</g></svg>';
+}
+function meter(s){
+ var c=s>=85?"":(s>=55?"warn":"bad");
+ return '<div class="meter" role="img" aria-label="'+s+'%"><div class="track"><i class="'+c+'" style="width:'+s+'%"></i><b style="left:55%"></b><b style="left:85%"></b></div><div class="scale"><span>0</span><span style="left:55%">55</span><span style="left:85%">85</span></div></div>';
+}
+function ttl(p){return (p.brand?esc(p.brand)+' ':'')+t("ty_"+p.type)}
+function find(id){return S.products.filter(function(p){return p.id===+id})[0]}
+
+/* ---------- i18n + chrome ---------- */
+function fillSelect(el,items){
+ var v=el.value;el.innerHTML=items.map(function(i){return '<option value="'+esc(i[0])+'">'+esc(i[1])+'</option>'}).join("");
+ if(v&&items.some(function(i){return i[0]===v}))el.value=v;
+}
+function applyI18n(){
+ document.documentElement.lang=LANGS[L];
+ $$("[data-i18n]").forEach(function(n){n.textContent=t(n.getAttribute("data-i18n"))});
+ $$("[data-i18n-ph]").forEach(function(n){n.placeholder=t(n.getAttribute("data-i18n-ph"))});
+ $$("#langSeg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.lang===LANGS[L]))});
+ $$("#curSeg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.cur===CUR))});
+ fillSelect($("#sort"),[["new",t("sort_new")],["asc",t("sort_asc")],["desc",t("sort_desc")]]);
+ var types=["tee","hoodie","jeans","jacket","sneakers","dress"];
+ fillSelect($("#type"),types.map(function(k){return [k,t("ty_"+k)]}));
+ fillSelect($("#cond"),["new","great","good"].map(function(k){return [k,t("cond_"+k)]}));
+ fillSelect($("#scity"),CITIES.map(function(c){return [c.id,cityName(c.id)]}));
+ fillSelect($("#gender"),[["f",t("gn_f")],["m",t("gn_m")],["k",t("gn_k")]]);
+ fillSelect($("#fGender"),[["all",t("fl_gender_all")],["f",t("gn_f")],["m",t("gn_m")],["k",t("gn_k")]]);
+ $("#fMinL").textContent=t("fl_min")+", "+CUR;$("#fMaxL").textContent=t("fl_max")+", "+CUR;
+ fillSelect($("#demo"),[["auto",t("d_auto")],["ok",t("d_ok")],["doubt",t("d_doubt")],["bad",t("d_bad")]]);
+ $("#chips").innerHTML=["all","tops","bottoms","outer","shoes","dress"].map(function(k){return '<button class="chip" data-cat="'+k+'" aria-pressed="'+(S.cat===k)+'">'+t("c_"+k)+'</button>'}).join("");
+ $("#rate").textContent=t("foot_rate",{r:RATE});
+ $$("#themeSeg button").forEach(function(b){var lbl=t(b.dataset.theme==="dark"?"th_dark":"th_light");b.setAttribute("aria-label",lbl);b.title=lbl;b.setAttribute("aria-pressed",String(b.dataset.theme===effTheme()))});
+ renderAll();updatePrice();
+ if(S.modalFn)$("#modalBody").innerHTML=S.modalFn();
+}
+
+/* ---------- catalog ---------- */
+function thumb(p){var ph=(p.photos||[])[0];return '<div class="art'+(ph?' ph':'')+'">'+(ph?'<img src="'+ph+'" alt="">':art(p.type,p.color))+'</div>'}
+function heart(){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.4-9.5 9-9.5 9Z"/></svg>'}
+function sname(sid){return sid==="me"?t("you"):(SELLERS[sid]?SELLERS[sid].name:"")}
+function ratingText(sid){var r=SELLERS[sid];if(!r||!r.count)return t("no_rating");return "★ "+new Intl.NumberFormat(LANGS[L],{minimumFractionDigits:1,maximumFractionDigits:1}).format(r.sum/r.count)+" ("+r.count+")"}
+function card(p){
+ var fv=S.favs.indexOf(p.id)>-1,fl=t(fv?"fav_del":"fav_add");
+ var badge=p.sold?'<span class="badge sd">'+t("st_sold")+'</span>':'<span class="badge '+(p.status==="ai"?"ok":"ex")+'">'+t(p.status==="ai"?"b_ai":"b_expert")+'</span>';
+ return '<div class="cw"><button class="card" data-id="'+p.id+'">'+thumb(p)+'<div class="cbody">'+badge+'<h3>'+ttl(p)+'</h3><p class="meta">'+esc(p.size)+' · '+t("cond_"+p.cond)+' · '+cityName(p.city)+'</p><p class="rate">'+ratingText(p.seller)+'</p><p class="price"><b>'+money(buyer(p.price))+'</b><small>'+money2(buyer(p.price))+'</small></p></div></button><button class="fav" data-fav="'+p.id+'" aria-pressed="'+fv+'" aria-label="'+fl+'" title="'+fl+'">'+heart()+'</button></div>';
+}
+function galleryHTML(p){
+ var ph=p.photos||[];
+ if(!ph.length)return '<div class="art">'+art(p.type,p.color)+'</div>';
+ return '<div class="art ph"><img id="mainPhoto" src="'+ph[0]+'" alt=""></div>'+(ph.length>1?'<div class="gthumbs">'+ph.map(function(u,i){return '<button type="button" class="gt" data-act="photo" data-src="'+u+'" aria-label="'+(i+1)+'"><img src="'+u+'" alt=""></button>'}).join("")+'</div>':'');
+}
+function actions(p){
+ var fv=S.favs.indexOf(p.id)>-1;
+ var fb='<button class="btn" id="favBtn" data-act="fav" data-id="'+p.id+'">'+t(fv?"fav_del":"fav_add")+'</button>';
+ if(p.sold)return '<p class="result warn"><b>'+t("st_sold")+'</b></p><div class="qact">'+fb+'</div>';
+ if(p.seller==="me")return '<p class="note">'+t("own_item")+'</p>';
+ return '<div class="qact"><button class="btn primary" data-act="buy" data-id="'+p.id+'">'+t("buy")+'</button><button class="btn" data-act="chat" data-id="'+p.id+'">'+t("chat_btn")+'</button>'+fb+'</div>';
+}
+function renderCatalog(){
+ var q=S.q.toLowerCase();
+ var list=S.products.filter(function(p){var bp=buyer(p.price);return (S.cat==="all"||CATOF[p.type]===S.cat)&&(!q||(p.brand+" "+t("ty_"+p.type)).toLowerCase().indexOf(q)>-1)&&(S.fg==="all"||p.gender===S.fg)&&(!S.fs||p.size.toLowerCase().indexOf(S.fs)>-1)&&(!S.fmin||bp>=S.fmin)&&(!S.fmax||bp<=S.fmax)&&!p.sold});
+ list.sort(function(a,b){return S.sort==="asc"?a.price-b.price:S.sort==="desc"?b.price-a.price:b.id-a.id});
+ $("#count").textContent=t("found",{n:list.length});
+ $("#grid").innerHTML=list.map(card).join("")||'<p class="muted">'+t("none")+'</p>';
+}
+function productHTML(p){
+ var vtxt=p.status==="ai"?t("m_ai"):t("m_ex");
+ return '<h2>'+ttl(p)+'</h2><div class="mgrid"><div>'+galleryHTML(p)+'</div><div>'+
+ '<div><p class="big">'+money(buyer(p.price))+'</p><p class="note">'+money2(buyer(p.price))+' · '+t("incl")+'</p></div>'+
+ '<dl class="kv"><dt>'+t("lbl_size")+'</dt><dd>'+esc(p.size)+'</dd><dt>'+t("lbl_cond")+'</dt><dd>'+t("cond_"+p.cond)+'</dd><dt>'+t("f_gender")+'</dt><dd>'+t("gn_"+p.gender)+'</dd><dt>'+t("lbl_city")+'</dt><dd>'+cityName(p.city)+'</dd><dt>'+t("seller")+'</dt><dd>'+esc(sname(p.seller))+' · '+ratingText(p.seller)+'</dd></dl>'+
+ (p.desc?'<div><p class="mono muted" style="margin-bottom:4px">'+t("f_desc")+'</p><p class="desc">'+esc(p.desc)+'</p></div>':'')+
+ '<div><span class="badge '+(p.status==="ai"?"ok":"ex")+'">'+t("m_verif")+'</span><p style="margin:8px 0">'+vtxt+'</p><p class="mono muted" style="margin-bottom:6px">'+t("m_score")+' '+p.score+'%</p>'+meter(p.score)+'</div>'+
+ '<div><p class="mono muted" style="margin-bottom:6px">'+t("m_guar")+'</p><ul class="glist"><li>'+t("g1")+'</li><li>'+t("g2")+'</li><li>'+t("g3")+'</li></ul></div>'+
+ actions(p)+'</div></div>';
+}
+function checkoutHTML(p){
+ var opts=CITIES.map(function(c){return '<option value="'+c.id+'">'+esc(cityName(c.id))+'</option>'}).join("");
+ return '<h2>'+t("co_title")+'</h2><div class="mgrid"><div><div class="art">'+art(p.type,p.color)+'</div><p><b>'+ttl(p)+'</b></p><p class="big">'+money(buyer(p.price))+'</p><p class="note">'+money2(buyer(p.price))+'</p></div><div>'+
+ '<label class="field"><span>'+t("co_name")+'</span><input id="coName" type="text" autocomplete="name"></label>'+
+ '<label class="field"><span>'+t("co_phone")+'</span><input id="coPhone" type="text" inputmode="tel" autocomplete="tel" placeholder="+373 ..."></label>'+
+ '<label class="field"><span>'+t("co_city")+'</span><select id="coCity">'+opts+'</select></label>'+
+ '<p class="note">'+t("co_note")+'</p><p class="err" id="coErr" role="alert"></p>'+
+ '<button class="btn primary" data-act="pay" data-id="'+p.id+'">'+t("co_pay",{p:money(buyer(p.price))})+'</button></div></div>';
+}
+function trackerHTML(){
+ var o=S.order,p=o.p,st=o.stage,steps=["tr1","tr2","tr3","tr4"];
+ var li=steps.map(function(k,i){
+  var cnt=st===4?3:st+1, done=i<cnt, cur=st!==4&&i===cnt;
+  return '<li class="'+(done?"done":cur?"cur":"")+'">'+t(k)+'</li>';
+ }).join("");
+ var act="";
+ if(st===0)act='<button class="btn primary" data-act="ship">'+t("tr_ship")+'</button>';
+ if(st===1)act='<button class="btn primary" data-act="recv">'+t("tr_recv")+'</button>';
+ if(st===2)act='<div class="qact"><button class="btn primary" data-act="ok">'+t("tr_ok")+'</button><button class="btn" data-act="bad">'+t("tr_bad")+'</button></div>';
+ if(st===3){var rt;if(o.rated)rt='<p class="note" style="margin-top:10px">'+t("rate_thanks",{n:o.rated})+'</p>';else rt='<div style="margin-top:12px"><p class="mono muted">'+t("rate_h")+' · '+esc(sname(p.seller))+'</p><div class="stars">'+[1,2,3,4,5].map(function(n){return '<button type="button" class="star" data-act="rate" data-n="'+n+'" aria-label="'+n+'">★</button>'}).join("")+'</div></div>';act='<p class="result ok"><b>'+t("tr_done")+'</b></p>'+rt;}
+ if(st===4)act='<p class="result warn"><b>'+t("tr_refund")+'</b></p>';
+ return '<h2>'+t("tr_title")+'</h2><p class="muted" style="margin-top:6px">'+ttl(p)+' · '+money(buyer(p.price))+'</p><ol class="tl">'+li+'</ol>'+act;
+}
+function setModal(fn,cid){S.chatOpen=cid||null;S.modalFn=fn;$("#modalBody").innerHTML=fn();$("#overlay").hidden=false;}
+var lastFocus=null;
+function openModal(fn){lastFocus=document.activeElement;setModal(fn);$("#mclose").focus();}
+function closeModal(){$("#overlay").hidden=true;$("#modalBody").innerHTML="";S.modalFn=null;S.chatOpen=null;if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+
+/* ---------- sell ---------- */
+function updatePrice(){
+ var v=parseFloat($("#price").value)||0;
+ if(v<=0){$("#pbuyer").textContent="—";$("#pyou").textContent="—";return}
+ var b=buyer(v);
+ $("#pbuyer").textContent=money(b)+" ≈ "+money2(b);
+ $("#pyou").textContent=money(v)+" ≈ "+money2(v);
+}
+function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h}
+function computeScore(f){
+ var h=hash(f.brand.toLowerCase()+f.type+f.size)%14, d=f.demo;
+ if(d==="ok")return 94+h%5;
+ if(d==="doubt")return 62+h;
+ if(d==="bad")return 24+h*2;
+ if(!f.brand)return 86+h%10;
+ var known=KNOWN.some(function(k){return f.brand.toLowerCase().indexOf(k)>-1});
+ var s=58+(known?16:0)+(f.price>=80&&f.price<=6000?6:0)+h+8;
+ return Math.max(40,Math.min(98,s));
+}
+function resetForm(){
+ ["brand","size","price","desc"].forEach(function(i){$("#"+i).value=""});
+ S.photos=[null,null,null,null];
+ $$(".slot").forEach(function(s){s.classList.remove("filled");s.querySelector(".img").style.backgroundImage=""});
+ $$(".slot input").forEach(function(i){i.value=""});
+ updatePrice();
+}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+async function runCheck(f){
+ var box=$("#run");S.busy=true;$("#submit").disabled=true;
+ var keys=["ai1","ai2","ai3","ai4"];
+ box.innerHTML='<ul class="steps">'+keys.map(function(k){return '<li><span class="dot"></span>'+t(k)+'</li>'}).join("")+'</ul>';
+ var lis=$$(".steps li",box);
+ for(var i=0;i<lis.length;i++){await sleep(520);lis[i].classList.add("done");}
+ await sleep(250);
+ var score=computeScore(f),kind=score>=85?"ok":score>=55?"warn":"bad";
+ var reasons=kind==="ok"?(f.brand?["r_ok1","r_ok2","r_ok3"]:["r_n1","r_n2","r_n3"]):kind==="warn"?["r_d1","r_d2","r_ok1"]:["r_b1","r_b2"];
+ var base={brand:f.brand,type:f.type,size:f.size,cond:f.cond,gender:f.gender,city:f.city,price:f.price,desc:f.desc,photos:f.photos,seller:"me",color:COLORS[f.type],score:score};
+ var head,body,links="";
+ if(kind==="ok"){S.nextId++;S.products.push(Object.assign({id:S.nextId,status:"ai"},base));head=t("res_ok_h");body=t("res_ok_p");links='<a class="btn" href="#catalog">'+t("go_cat")+'</a><a class="btn" href="#mine">'+t("nav_mine")+'</a>';showToast(t("t_pub"));}
+ else if(kind==="warn"){S.nextId++;S.queue.unshift(Object.assign({id:S.nextId,reasons:reasons,photos:S.photos.filter(Boolean)},base));head=t("res_d_h");body=t("res_d_p");links='<a class="btn" href="#review">'+t("go_rev")+'</a><a class="btn" href="#mine">'+t("nav_mine")+'</a>';showToast(t("t_queue"));}
+ else{head=t("res_b_h");body=t("res_b_p");}
+ box.innerHTML='<div class="result '+kind+'"><h3>'+head+'</h3><p>'+body+'</p><p class="mono" style="color:var(--ink)">'+t("m_score")+' '+score+'%</p>'+meter(score)+'<ul>'+reasons.map(function(r){return '<li>'+t(r)+'</li>'}).join("")+'</ul>'+(links?'<div class="row">'+links+'</div>':'')+'</div>';
+ if(kind!=="bad")resetForm();
+ renderAll();
+ S.busy=false;$("#submit").disabled=false;
+ box.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+/* ---------- review ---------- */
+function renderQueue(){
+ $("#qn").textContent=S.queue.length;
+ if(!S.queue.length){$("#queue").innerHTML='<p class="muted">'+t("rv_empty")+'</p>';return}
+ $("#queue").innerHTML=S.queue.map(function(q){
+  var th=q.photos.length?q.photos.map(function(u){return '<img src="'+u+'" alt="">'}).join(""):'<div class="art">'+art(q.type,q.color)+'</div>';
+  return '<article class="qitem"><div><div class="thumbs">'+th+'</div>'+(q.photos.length?'':'<p class="note" style="margin-top:8px">'+t("no_photos")+'</p>')+'</div><div class="qinfo">'+
+  '<h3>'+ttl(q)+(q.example?' <span class="badge ex">'+t("rv_ex")+'</span>':'')+'</h3>'+
+  '<p class="meta">'+esc(q.size)+' · '+t("cond_"+q.cond)+' · '+cityName(q.city)+' · '+money(q.price)+'</p>'+
+  (q.desc?'<div><p class="mono muted" style="margin-bottom:4px">'+t("f_desc")+'</p><p class="desc">'+esc(q.desc)+'</p></div>':'')+
+  '<div><p class="mono muted" style="margin-bottom:6px">'+t("m_score")+' '+q.score+'%</p>'+meter(q.score)+'</div>'+
+  '<div><p class="mono muted" style="margin-bottom:4px">'+t("rv_notes")+'</p><ul>'+q.reasons.map(function(r){return '<li>'+t(r)+'</li>'}).join("")+'</ul></div>'+
+  '<div class="qact"><button class="btn primary" data-act="approve" data-qid="'+q.id+'">'+t("approve")+'</button><button class="btn" data-act="reject" data-qid="'+q.id+'">'+t("reject")+'</button></div></div></article>';
+ }).join("");
+}
+
+/* ---------- favorites, my listings ---------- */
+function renderAll(){renderCatalog();renderFavs();renderMine();renderQueue();renderChats()}
+function toggleFav(id){
+ var i=S.favs.indexOf(id);
+ if(i>-1)S.favs.splice(i,1);
+ else{if(S.favs.length>=FAV_MAX){showToast(t("fav_max"));return}S.favs.push(id)}
+ renderCatalog();renderFavs();
+}
+function renderFavs(){
+ var list=S.favs.map(find).filter(Boolean);
+ $("#fn").textContent=list.length;$("#fn").hidden=!list.length;
+ $("#favCount").textContent=t("favs_count",{n:list.length,max:FAV_MAX});
+ $("#favgrid").innerHTML=list.map(card).join("")||'<p class="muted">'+t("favs_empty")+'</p>';
+}
+function renderMine(){
+ var mine=S.products.filter(function(p){return p.seller==="me"}).sort(function(a,b){return b.id-a.id});
+ var pend=S.queue.filter(function(q){return q.seller==="me"});
+ var act=mine.filter(function(p){return !p.sold}).length,sold=mine.length-act;
+ $("#mineSum").innerHTML='<p class="mono muted">'+t("mine_rating")+'</p><p class="big">'+ratingText("me")+'</p><p class="note">'+t("st_active")+': '+act+' · '+t("st_sold")+': '+sold+' · '+t("st_review")+': '+pend.length+'</p>';
+ var rows=pend.map(function(q){
+  return '<article class="mrow">'+thumb(q)+'<div class="minfo"><span class="badge ex">'+t("st_review")+'</span><h3>'+ttl(q)+'</h3><p class="meta">'+t("pr_buyer")+': '+money(buyer(q.price))+'</p><div class="mact"><button class="btn" data-act="withdraw" data-id="'+q.id+'">'+t("withdraw")+'</button></div></div></article>';
+ });
+ rows=rows.concat(mine.map(function(p){
+  var badge=p.sold?'<span class="badge sd">'+t("st_sold")+'</span>':'<span class="badge ok">'+t("st_active")+'</span>';
+  var acts=p.sold?'<button class="btn" data-act="relist" data-id="'+p.id+'">'+t("relist")+'</button>':'<input class="pin" id="pin'+p.id+'" type="number" min="1" inputmode="numeric" value="'+p.price+'" aria-label="MDL"><button class="btn" data-act="saveprice" data-id="'+p.id+'">'+t("pr_save")+'</button><button class="btn" data-act="sold" data-id="'+p.id+'">'+t("mark_sold")+'</button>';
+  acts+='<button class="btn" data-act="del" data-id="'+p.id+'">'+t(S.delAsk===p.id?"takedown_ask":"takedown")+'</button>';
+  return '<article class="mrow">'+thumb(p)+'<div class="minfo">'+badge+'<h3>'+ttl(p)+'</h3><p class="meta">'+esc(p.size)+' · '+t("cond_"+p.cond)+' · '+cityName(p.city)+'</p><p class="meta">'+t("pr_buyer")+': '+money(buyer(p.price))+' · '+t("pr_you")+': '+money(p.price)+'</p><div class="mact">'+acts+'</div></div></article>';
+ }));
+ $("#mine").innerHTML=rows.length?rows.join(""):'<p class="muted">'+t("mine_empty")+'</p>';
+}
+function rateSeller(n){
+ var o=S.order;if(!o||o.rated)return;
+ o.rated=n;var r=SELLERS[o.p.seller];if(r){r.sum+=n;r.count++}
+ setModal(trackerHTML);renderAll();
+}
+
+/* ---------- chat ---------- */
+function thread(id){return S.chats[id]||(S.chats[id]={msgs:[],unread:0})}
+function tm(ts){return new Date(ts).toLocaleTimeString(LANGS[L],{hour:"2-digit",minute:"2-digit"})}
+function chatHTML(p){
+ var th=thread(p.id);
+ var msgs=th.msgs.length?th.msgs.map(function(m){return '<div class="msg '+(m.me?"me":"them")+'">'+esc(m.text)+'<time>'+tm(m.ts)+'</time></div>'}).join(""):'<p class="note">'+t("chat_empty")+'</p>';
+ var quick=[1,2,3,4].map(function(i){return '<button type="button" class="chip" data-act="quick" data-i="'+i+'">'+t("cq"+i)+'</button>'}).join("");
+ return '<div class="chat-head"><div class="art">'+art(p.type,p.color)+'</div><div style="min-width:0"><h2 style="font-size:18px">'+ttl(p)+'</h2><p class="meta">'+esc(sname(p.seller))+' · '+ratingText(p.seller)+' · '+cityName(p.city)+' · '+money(buyer(p.price))+'</p></div></div>'+
+ '<div class="thread" id="thread">'+msgs+'</div><div class="quick">'+quick+'</div>'+
+ '<form class="cform" data-chat="'+p.id+'"><input id="chatInput" type="text" autocomplete="off" maxlength="300" placeholder="'+esc(t("chat_ph"))+'"><button class="btn primary" type="submit">'+t("send")+'</button></form>'+
+ '<p class="note" style="margin-top:10px">'+t("chat_safe")+' '+t("chat_demo")+'</p>'+
+ '<button class="btn" style="margin-top:10px" data-act="toprod" data-id="'+p.id+'">'+t("to_prod")+'</button>';
+}
+function scrollThread(){var el=$("#thread");if(el)el.scrollTop=el.scrollHeight}
+function openChat(p,inModal){
+ thread(p.id).unread=0;renderChats();
+ if(!inModal)lastFocus=document.activeElement;
+ setModal(function(){return chatHTML(p)},p.id);scrollThread();
+ var n=$("#chatInput");if(n)n.focus();
+}
+function refreshChat(id){
+ var inp=$("#chatInput"),v=inp?inp.value:"",foc=!!inp&&document.activeElement===inp;
+ setModal(function(){return chatHTML(find(id))},id);scrollThread();
+ var n=$("#chatInput");if(n){n.value=v;if(foc)n.focus()}
+}
+function sendMsg(id,text,key){
+ text=(text||"").trim();if(!text)return;
+ var th=thread(id);th.msgs.push({me:1,text:text,ts:Date.now()});
+ refreshChat(id);var n=$("#chatInput");if(n){n.value="";n.focus()}
+ renderChats();
+ setTimeout(function(){
+  th.msgs.push({me:0,text:t(key||"ca0"),ts:Date.now()});
+  if(S.chatOpen===id)refreshChat(id);else{th.unread++;showToast(t("new_msg"))}
+  renderChats();
+ },1300);
+}
+function renderChats(){
+ var ids=Object.keys(S.chats).filter(function(k){return S.chats[k].msgs.length&&find(k)});
+ ids.sort(function(a,b){var x=S.chats[a].msgs,y=S.chats[b].msgs;return y[y.length-1].ts-x[x.length-1].ts});
+ var n=ids.filter(function(k){return S.chats[k].unread>0}).length;
+ $("#cn").textContent=n;$("#cn").hidden=!n;
+ $("#clist").innerHTML=ids.length?ids.map(function(k){
+  var p=find(k),m=S.chats[k].msgs,last=m[m.length-1];
+  return '<button class="crow" data-chat="'+k+'"><div class="art">'+art(p.type,p.color)+'</div><div class="t"><h3 style="font-size:15px">'+ttl(p)+'</h3><p class="muted">'+esc(last.text)+'</p></div>'+(S.chats[k].unread?'<span class="udot"></span>':'')+'</button>';
+ }).join(""):'<p class="muted">'+t("chats_empty")+'</p>';
+}
+
+/* ---------- misc ---------- */
+var toastT;
+function showToast(m){var el=$("#toast");el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},2600)}
+var VIEWS=["catalog","sell","mine","favs","chats","how","review"];
+function route(){
+ var h=location.hash.slice(1);if(VIEWS.indexOf(h)<0&&h!=="grid-top")h="catalog";
+ var v=h==="grid-top"?"catalog":h;
+ VIEWS.forEach(function(n){$("#v-"+n).hidden=n!==v});
+ $$("#nav a").forEach(function(a){if(a.dataset.v===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+ if(h!=="grid-top")window.scrollTo(0,0);
+}
+
+/* ---------- events ---------- */
+$("#langSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;L=LANGS.indexOf(b.dataset.lang);try{localStorage.setItem("rw-lang",b.dataset.lang)}catch(x){}applyI18n()});
+$("#themeSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;document.documentElement.setAttribute("data-theme",b.dataset.theme);try{localStorage.setItem("rw-theme",b.dataset.theme)}catch(x){}$$("#themeSeg button").forEach(function(c){c.setAttribute("aria-pressed",String(c===b))})});
+$("#curSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;CUR=b.dataset.cur;S.fmin=0;S.fmax=0;$("#fMin").value="";$("#fMax").value="";try{localStorage.setItem("rw-cur",CUR)}catch(x){}applyI18n()});
+$("#q").addEventListener("input",function(e){S.q=e.target.value.trim();renderCatalog()});
+$("#sort").addEventListener("change",function(e){S.sort=e.target.value;renderCatalog()});
+$("#chips").addEventListener("click",function(e){var b=e.target.closest(".chip");if(!b)return;S.cat=b.dataset.cat;$$(".chip").forEach(function(c){c.setAttribute("aria-pressed",String(c===b))});renderCatalog()});
+function gridClick(e){
+ var f=e.target.closest(".fav");if(f){toggleFav(+f.dataset.fav);return}
+ var c=e.target.closest(".card");if(!c)return;var p=find(c.dataset.id);openModal(function(){return productHTML(p)});
+}
+$("#grid").addEventListener("click",gridClick);
+$("#favgrid").addEventListener("click",gridClick);
+$("#mine").addEventListener("click",function(e){
+ var b=e.target.closest("[data-act]");if(!b)return;
+ var a=b.dataset.act,id=+b.dataset.id,p=find(id);
+ if(a==="saveprice"&&p){var v=Math.round(parseFloat($("#pin"+id).value)||0);if(v>0){p.price=v;showToast(t("price_saved"));renderAll()}}
+ else if(a==="sold"&&p){
+  p.sold=true;S.delAsk=null;showToast(t("st_sold"));renderAll();
+  if(!p.rated){p.rated=true;setTimeout(function(){var n=Math.random()<0.3?4:5;SELLERS.me.sum+=n;SELLERS.me.count++;showToast(t("rated_me",{n:n}));renderAll()},1600)}
+ }
+ else if(a==="relist"&&p){p.sold=false;renderAll()}
+ else if(a==="del"&&p){
+  if(S.delAsk===id){S.products=S.products.filter(function(x){return x.id!==id});S.favs=S.favs.filter(function(x){return x!==id});S.delAsk=null;showToast(t("removed"))}else S.delAsk=id;
+  renderAll();
+ }
+ else if(a==="withdraw"){S.queue=S.queue.filter(function(x){return x.id!==id});showToast(t("removed"));renderAll()}
+});
+$("#price").addEventListener("input",updatePrice);
+$$(".slot input").forEach(function(inp){inp.addEventListener("change",function(){
+ var f=inp.files&&inp.files[0],slot=inp.closest(".slot"),i=+inp.dataset.slot;
+ if(!f){S.photos[i]=null;slot.classList.remove("filled");slot.querySelector(".img").style.backgroundImage="";return}
+ var u=URL.createObjectURL(f);S.photos[i]=u;slot.classList.add("filled");slot.querySelector(".img").style.backgroundImage='url("'+u+'")';
+})});
+$("#form").addEventListener("submit",function(e){
+ e.preventDefault();if(S.busy)return;
+ var f={brand:$("#brand").value.trim(),type:$("#type").value,size:$("#size").value.trim(),cond:$("#cond").value,gender:$("#gender").value,city:$("#scity").value,price:parseFloat($("#price").value)||0,desc:$("#desc").value.trim(),photos:S.photos.slice(),demo:$("#demo").value};
+ if(!f.size||f.price<=0||S.photos.some(function(p){return !p})){$("#err").textContent=t("err_fields");return}
+ $("#err").textContent="";runCheck(f);
+});
+$("#modalBody").addEventListener("click",function(e){
+ var b=e.target.closest("[data-act]");if(!b)return;var a=b.dataset.act;
+ if(a==="fav"){toggleFav(+b.dataset.id);var fb=$("#favBtn");if(fb)fb.textContent=t(S.favs.indexOf(+b.dataset.id)>-1?"fav_del":"fav_add")}
+ else if(a==="photo"){var mp=$("#mainPhoto");if(mp)mp.src=b.dataset.src}
+ else if(a==="rate"){rateSeller(+b.dataset.n)}
+ else if(a==="chat"){openChat(find(b.dataset.id),true)}
+ else if(a==="quick"){sendMsg(S.chatOpen,t("cq"+b.dataset.i),"ca"+b.dataset.i)}
+ else if(a==="toprod"){var pp=find(b.dataset.id);setModal(function(){return productHTML(pp)})}
+ else if(a==="buy"){var p=find(b.dataset.id);setModal(function(){return checkoutHTML(p)})}
+ else if(a==="pay"){
+  var n=$("#coName").value.trim(),ph=$("#coPhone").value.trim();
+  if(!n||ph.length<6){$("#coErr").textContent=t("co_err");return}
+  S.order={p:find(b.dataset.id),stage:0};setModal(trackerHTML);
+ }
+ else if(a==="ship"){S.order.stage=1;setModal(trackerHTML)}
+ else if(a==="recv"){S.order.stage=2;setModal(trackerHTML)}
+ else if(a==="ok"){S.order.stage=3;S.order.p.sold=true;setModal(trackerHTML);renderAll()}
+ else if(a==="bad"){S.order.stage=4;setModal(trackerHTML)}
+});
+$("#queue").addEventListener("click",function(e){
+ var b=e.target.closest("[data-act]");if(!b)return;var id=+b.dataset.qid;
+ var q=S.queue.filter(function(x){return x.id===id})[0];if(!q)return;
+ S.queue=S.queue.filter(function(x){return x.id!==id});
+ if(b.dataset.act==="approve"){S.products.push({id:++S.nextId,brand:q.brand,type:q.type,size:q.size,cond:q.cond,gender:q.gender,city:q.city,price:q.price,desc:q.desc,photos:q.photos,seller:q.seller,color:q.color,status:"expert",score:q.score});showToast(t("t_appr"))}
+ else showToast(t("t_rej"));
+ renderAll();
+});
+function fSync(){
+ S.fg=$("#fGender").value;S.fs=$("#fSize").value.trim().toLowerCase();
+ var k=CUR==="PRB"?RATE:1;S.fmin=(parseFloat($("#fMin").value)||0)/k;S.fmax=(parseFloat($("#fMax").value)||0)/k;renderCatalog();
+}
+["fGender"].forEach(function(i){$("#"+i).addEventListener("change",fSync)});
+["fSize","fMin","fMax"].forEach(function(i){$("#"+i).addEventListener("input",fSync)});
+$("#fReset").addEventListener("click",function(){$("#fGender").value="all";["fSize","fMin","fMax"].forEach(function(i){$("#"+i).value=""});fSync()});
+$("#modalBody").addEventListener("submit",function(e){var f=e.target.closest("[data-chat]");if(!f)return;e.preventDefault();sendMsg(+f.dataset.chat,$("#chatInput").value)});
+$("#clist").addEventListener("click",function(e){var r=e.target.closest(".crow");if(!r)return;openChat(find(r.dataset.chat),false)});
+$("#mclose").addEventListener("click",closeModal);
+$("#overlay").addEventListener("click",function(e){if(e.target.id==="overlay")closeModal()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("#overlay").hidden)closeModal()});
+window.addEventListener("hashchange",route);
+
+applyI18n();route();
+})();
+</script>
+
+</body></html>
