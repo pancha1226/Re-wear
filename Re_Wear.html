@@ -35,8 +35,10 @@ button{cursor:pointer}
 /* header */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 24px;padding-block:10px}
-.logo{font:800 24px var(--display);text-decoration:none;letter-spacing:-.02em}
-.logo span{color:var(--accent);font-family:var(--mono);font-weight:600;padding:0 1px}
+.logo{display:inline-flex;align-items:center;gap:9px;text-decoration:none}
+.logo .mark{width:30px;height:30px;flex:none;display:block}
+.logo .wm{font:800 24px/1 var(--display);letter-spacing:-.02em}
+.logo .wm em{font-style:normal;color:var(--accent);font-family:var(--mono);font-weight:600;padding:0 1px}
 nav{display:flex;gap:4px;order:3;flex-basis:100%;overflow-x:auto}
 nav a{white-space:nowrap;text-decoration:none;font-weight:600;font-size:14px;padding:6px 12px;border-radius:8px;color:var(--muted)}
 nav a[aria-current=page]{background:var(--ink);color:var(--bg)}
@@ -226,22 +228,48 @@ input[type=text],input[type=number],input[type=search],select,textarea{width:100
 .mact{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .mact .pin{width:110px;padding:8px 10px}
 .mact .btn{padding:8px 12px;font-size:14px}
+.modal h2{padding-right:72px}
+.acct{display:flex;align-items:center;gap:8px}
+.who{font-weight:600;font-size:13px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ctl{flex-wrap:wrap;align-items:center}
+.ctl .btn{padding:5px 12px;font-size:13px}
+.gate{border:1.5px dashed var(--ink);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.authform{display:grid;gap:14px;margin-top:6px}
+.phone{display:flex}
+.phone .pre{padding:10px 12px;border:1px solid var(--line);border-right:0;border-radius:8px 0 0 8px;background:var(--tile);font:600 14px var(--mono);display:grid;align-items:center}
+.phone input{border-radius:0 8px 8px 0;min-width:0}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.check input{margin-top:3px;width:18px;height:18px;flex:none}
+.demo{border:1.5px dashed var(--warn);background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:10px 12px;font-weight:600;font-size:14px}
+.consent{position:fixed;inset:0;z-index:100;background:rgba(10,12,16,.74);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.cbox{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:22px;width:100%;max-width:560px;max-height:100%;overflow:auto;display:grid;gap:14px}
+.cbox h2{font-size:24px}
+.cl{display:flex;justify-content:flex-end}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);text-decoration:underline;font-weight:600;font-size:16px;text-align:left}
+footer .linkbtn{font-size:14px;justify-self:start}
+.cstext{display:grid;gap:8px;border:1px dashed var(--line);border-radius:8px;padding:12px;max-height:260px;overflow:auto;font-size:14px;color:var(--ink)}
+.paym{display:flex;gap:12px;align-items:center;border:1.5px solid var(--accent);border-radius:8px;padding:12px}
+.paym .radio{width:16px;height:16px;border-radius:50%;border:5px solid var(--accent);flex:none}
+.rows li{justify-content:flex-start;gap:10px}
+.rows li span:last-child{color:inherit;font-weight:500}
+.rows li span:last-child::before{content:none}
+.rows li::before{content:"\2713";color:var(--ok);font-weight:700}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;max-width:calc(100% - 32px)}
 footer{border-top:1px solid var(--line);margin-top:24px;padding-block:20px;display:grid;gap:6px}
 </style>
 
 <header class="top"><div class="wrap bar">
-  <a class="logo" href="#catalog">Re<span>:</span>Wear</a>
+  <a class="logo" href="#catalog" aria-label="Re:Wear"><svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" style="fill:var(--accent)"/><g transform="translate(0 2.7)" style="fill:none;stroke:var(--accent-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11.2V10a2.4 2.4 0 1 0-2.4-2.4"/><path d="M16 11.2 6.4 18.4a1.6 1.6 0 0 0 .9 2.9h17.4a1.6 1.6 0 0 0 .9-2.9L16 11.2Z"/></g></svg><span class="wm">Re<em>:</em>Wear</span></a>
   <nav id="nav" aria-label="Menu">
     <a href="#catalog" data-v="catalog" data-i18n="nav_catalog"></a>
     <a href="#sell" data-v="sell" data-i18n="nav_sell"></a>
     <a href="#mine" data-v="mine" data-i18n="nav_mine"></a>
     <a href="#favs" data-v="favs"><span data-i18n="nav_favs"></span><span class="n" id="fn" hidden>0</span></a>
     <a href="#how" data-v="how" data-i18n="nav_how"></a>
-    <a href="#review" data-v="review"><span data-i18n="nav_review"></span><span class="n" id="qn">0</span></a>
     <a href="#chats" data-v="chats"><span data-i18n="nav_chats"></span><span class="n" id="cn" hidden>0</span></a>
   </nav>
   <div class="ctl">
+    <div class="acct" id="acct"></div>
     <div class="seg" id="langSeg" role="group" aria-label="Language"><button data-lang="ru" aria-pressed="true">RU</button><button data-lang="ro" aria-pressed="false">RO</button><button data-lang="en" aria-pressed="false">EN</button></div>
     <div class="seg" id="themeSeg" role="group"><button data-theme="light" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button data-theme="dark" aria-pressed="false"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button></div>
     <div class="seg" id="curSeg" role="group" aria-label="Currency"><button data-cur="MDL" aria-pressed="true">MDL</button><button data-cur="PRB" aria-pressed="false">PRB</button></div>
@@ -258,16 +286,14 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-block:20px;displ
       <p class="lead" data-i18n="hero_p"></p>
       <div class="cta"><a class="btn primary" href="#grid-top" data-i18n="cta_browse"></a><a class="btn" href="#sell" data-i18n="cta_sell"></a></div>
     </div>
-    <div class="label-card" aria-label="Sample report">
+    <div class="label-card" aria-label="Purchase protection">
       <p class="mono muted" data-i18n="rep_t"></p>
-      <h2>Levi's 501</h2>
+      <h2 data-i18n="m_guar"></h2>
       <ul class="rows">
-        <li><span data-i18n="chk_label"></span><span data-i18n="match"></span></li>
-        <li><span data-i18n="chk_inner"></span><span data-i18n="match"></span></li>
-        <li><span data-i18n="chk_hw"></span><span data-i18n="match"></span></li>
+        <li><span data-i18n="chk_label"></span></li>
+        <li><span data-i18n="chk_inner"></span></li>
+        <li><span data-i18n="chk_hw"></span></li>
       </ul>
-      <div class="verdict"><span class="mono muted" data-i18n="m_score"></span><strong>97%</strong></div>
-      <div class="meter"><div class="track"><i style="width:97%"></i><b style="left:55%"></b><b style="left:85%"></b></div><div class="scale"><span>0</span><span style="left:55%">55</span><span style="left:85%">85</span></div></div>
       <p class="note" data-i18n="meter_note"></p>
     </div>
   </div>
@@ -293,6 +319,7 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-block:20px;displ
 <!-- SELL -->
 <section id="v-sell" class="wrap section" hidden>
   <div class="head"><div><h2 data-i18n="sl_title"></h2><p class="muted" data-i18n="sl_sub"></p></div></div>
+  <div class="gate" id="sellGate" hidden><span data-i18n="au_sell_gate"></span><button class="btn primary" type="button" data-login data-i18n="login"></button></div>
   <form id="form" class="panel" novalidate style="display:grid;gap:18px">
     <div class="fgrid">
       <label class="field"><span data-i18n="f_brand"></span><input id="brand" type="text" autocomplete="off" placeholder="Levi's, Nike, Zara"></label>
@@ -319,10 +346,8 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-block:20px;displ
     </div>
     <p class="err" id="err" role="alert"></p>
     <div class="sellbar">
-      <label class="field"><span data-i18n="demo_sel"></span><select id="demo"></select></label>
       <button class="btn primary" id="submit" type="submit" data-i18n="submit"></button>
     </div>
-    <p class="note" data-i18n="demo_note"></p>
   </form>
   <div class="run" id="run" aria-live="polite"></div>
 </section>
@@ -331,7 +356,7 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-block:20px;displ
 <section id="v-how" class="wrap section" hidden>
   <h2 data-i18n="how_title" style="margin-bottom:18px"></h2>
   <div class="cols">
-    <div class="panel"><p class="mono muted">1</p><h3 data-i18n="h1_t"></h3><p class="muted" data-i18n="h1_p"></p></div>
+    <div class="panel"><p class="mono muted">1</p><h3 data-i18n="h4_t"></h3><p class="muted" data-i18n="h4_p"></p></div>
     <div class="panel"><p class="mono muted">2</p><h3 data-i18n="h2_t"></h3><p class="muted" data-i18n="h2_p"></p></div>
     <div class="panel"><p class="mono muted">3</p><h3 data-i18n="h3_t"></h3><p class="muted" data-i18n="h3_p"></p></div>
   </div>
@@ -357,18 +382,25 @@ footer{border-top:1px solid var(--line);margin-top:24px;padding-block:20px;displ
   <div class="clist" id="clist"></div>
 </section>
 
-<!-- REVIEW -->
-<section id="v-review" class="wrap section" hidden>
-  <div class="head"><div><h2 data-i18n="rv_title"></h2><p class="muted" data-i18n="rv_sub"></p></div></div>
-  <div class="queue" id="queue"></div>
-</section>
 </main>
 
 <footer class="wrap">
   <p class="muted" data-i18n="foot_region"></p>
   <p class="note" id="rate"></p>
+  <button class="linkbtn" id="csOpen" type="button" data-i18n="cs_title"></button>
 </footer>
 
+<div class="consent" id="consent" hidden role="dialog" aria-modal="true" aria-labelledby="csT">
+  <div class="cbox">
+    <div class="cl"><div class="seg" id="csLang" role="group" aria-label="Language"><button type="button" data-lang="ru" aria-pressed="true">RU</button><button type="button" data-lang="ro" aria-pressed="false">RO</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div></div>
+    <h2 id="csT" data-i18n="cs_title"></h2>
+    <p class="muted" data-i18n="cs_intro"></p>
+    <button type="button" class="linkbtn" id="csLink" aria-expanded="false" aria-controls="csText" data-i18n="cs_link"></button>
+    <div class="cstext" id="csText" hidden></div>
+    <label class="check"><input id="csBox" type="checkbox"><span data-i18n="cs_check"></span></label>
+    <button class="btn primary" id="csBtn" type="button" disabled data-i18n="cs_btn"></button>
+  </div>
+</div>
 <div class="overlay" id="overlay" hidden>
   <div class="modal" role="dialog" aria-modal="true">
     <button class="mclose" id="mclose" type="button" data-i18n="close"></button>
@@ -389,14 +421,12 @@ function effTheme(){var a=document.documentElement.getAttribute("data-theme");if
 
 var D={
 tagline:["маркетплейс одежды · Молдова и ПМР","marketplace de haine · Moldova și Transnistria","clothing marketplace · Moldova and Transnistria"],
-nav_catalog:["Каталог","Catalog","Browse"],nav_sell:["Продать","Vinde","Sell"],nav_how:["Как это работает","Cum funcționează","How it works"],nav_review:["Эксперт","Expert","Expert"],
-hero_h:["Вещи с проверкой подлинности","Haine cu autenticitate verificată","Clothes with verified authenticity"],
-hero_p:["ИИ сверяет фотографии каждой вещи с признаками оригинала. Если уверенности мало, фотографии смотрит эксперт. Продавец получает деньги только после того, как вы получили заказ.","AI-ul compară fotografiile fiecărui articol cu semnele originalului. Dacă nu e sigur, fotografiile ajung la un expert. Vânzătorul primește banii abia după ce ai primit comanda.","AI compares photos of every item with the marks of the original. If it is unsure, a person reviews the photos. The seller is paid only after you receive the order."],
+nav_catalog:["Каталог","Catalog","Browse"],nav_sell:["Продать","Vinde","Sell"],nav_how:["Как это работает","Cum funcționează","How it works"],hero_h:["Одежда из рук в руки","Haine din mână în mână","Clothes, hand to hand"],
+hero_p:["Покупайте и продавайте одежду в Молдове и ПМР. Платите через Re:Wear: деньги уходят продавцу только после того, как вы получили вещь.","Cumpără și vinde haine în Moldova și Transnistria. Plătește prin Re:Wear: banii ajung la vânzător abia după ce ai primit articolul.","Buy and sell clothes in Moldova and Transnistria. Pay through Re:Wear: the seller is paid only after you have received the item."],
 cta_browse:["Смотреть каталог","Vezi catalogul","Browse catalog"],cta_sell:["Продать вещь","Vinde un articol","Sell an item"],
-rep_t:["Пример отчёта проверки","Exemplu de raport de verificare","Sample verification report"],
-chk_label:["Наружная бирка","Eticheta exterioară","Outer label"],chk_inner:["Внутренний ярлык","Eticheta interioară","Inner label"],chk_hw:["Фурнитура и строчка","Accesorii și cusături","Hardware and stitching"],
-match:["совпадает","se potrivește","matches"],
-meter_note:["Выше 85: публикуем. От 55 до 85: решает эксперт. Ниже 55: нужны новые фотографии.","Peste 85: publicăm. Între 55 și 85: decide un expert. Sub 55: sunt necesare fotografii noi.","Above 85: published. 55 to 85: an expert decides. Below 55: new photos needed."],
+rep_t:["Для покупателя","Pentru cumpărător","For buyers"],
+chk_label:["Деньги у Re:Wear, пока вы не получили вещь","Banii rămân la Re:Wear până primești articolul","Your money stays with Re:Wear until you receive the item"],chk_inner:["3 дня на осмотр после получения","3 zile pentru verificare după primire","3 days to inspect after delivery"],chk_hw:["Возврат всей суммы, если вещь не соответствует описанию","Returnăm toată suma dacă articolul nu corespunde descrierii","Full refund if the item does not match the description"],
+meter_note:["Платите только через Re:Wear: сделки вне сайта не защищены.","Plătește doar prin Re:Wear: tranzacțiile din afara site-ului nu sunt protejate.","Pay only through Re:Wear: deals outside the site are not protected."],
 cat_title:["Каталог","Catalog","Catalog"],search_ph:["Бренд или вещь","Brand sau articol","Brand or item"],
 c_all:["Все","Toate","All"],c_tops:["Верх","Partea de sus","Tops"],c_bottoms:["Низ","Partea de jos","Bottoms"],c_outer:["Куртки","Geci","Outerwear"],c_shoes:["Обувь","Încălțăminte","Shoes"],c_dress:["Платья","Rochii","Dresses"],
 sort_new:["Сначала новые","Mai noi întâi","Newest first"],sort_asc:["Сначала дешевле","Mai ieftine întâi","Price: low to high"],sort_desc:["Сначала дороже","Mai scumpe întâi","Price: high to low"],
@@ -404,15 +434,11 @@ found:["Найдено: {n}","Găsite: {n}","Found: {n}"],none:["Ничего н
 examples_note:["Вещи в каталоге — примеры для демонстрации.","Articolele din catalog sunt exemple demonstrative.","Items in the catalog are demo examples."],
 ty_tee:["Футболка","Tricou","T-shirt"],ty_hoodie:["Худи","Hanorac","Hoodie"],ty_jeans:["Джинсы","Blugi","Jeans"],ty_jacket:["Куртка","Geacă","Jacket"],ty_sneakers:["Кроссовки","Adidași","Sneakers"],ty_dress:["Платье","Rochie","Dress"],
 cond_new:["Новая с биркой","Nouă, cu etichetă","New with tag"],cond_great:["Отличное","Excelentă","Excellent"],cond_good:["Хорошее","Bună","Good"],
-b_ai:["Проверено ИИ","Verificat de AI","AI verified"],b_expert:["Проверено экспертом","Verificat de expert","Expert verified"],
 incl:["включая сервис Re:Wear 15%","include serviciul Re:Wear 15%","includes Re:Wear service fee 15%"],
-m_verif:["Проверка подлинности","Verificarea autenticității","Authenticity check"],m_score:["Уверенность ИИ","Încrederea AI","AI confidence"],
-m_ai:["ИИ подтвердил подлинность по фотографиям. Ручная проверка не потребовалась.","AI-ul a confirmat autenticitatea după fotografii. Verificarea manuală nu a fost necesară.","AI confirmed authenticity from the photos. No manual review was needed."],
-m_ex:["ИИ сомневался, поэтому фотографии проверил эксперт Re:Wear и подтвердил подлинность.","AI-ul a avut dubii, așa că un expert Re:Wear a verificat fotografiile și a confirmat autenticitatea.","AI had doubts, so a Re:Wear expert reviewed the photos and confirmed authenticity."],
 m_guar:["Гарантия покупки","Garanția cumpărăturii","Purchase guarantee"],
 g1:["Деньги блокируются на счёте Re:Wear до получения заказа.","Banii sunt blocați în contul Re:Wear până primești comanda.","Your money is held by Re:Wear until you receive the order."],
 g2:["После получения у вас 3 дня на осмотр вещи.","După primire ai 3 zile pentru a verifica articolul.","After delivery you have 3 days to inspect the item."],
-g3:["Если вещь не соответствует описанию или не оригинал, возвращаем всю сумму.","Dacă articolul nu corespunde descrierii sau nu e original, returnăm toată suma.","If the item does not match the description or is not original, you get a full refund."],
+g3:["Если вещь не соответствует описанию, возвращаем всю сумму.","Dacă articolul nu corespunde descrierii, returnăm toată suma.","If the item does not match the description, you get a full refund."],
 buy:["Купить с гарантией","Cumpără cu garanție","Buy with guarantee"],close:["Закрыть","Închide","Close"],
 lbl_size:["Размер","Mărime","Size"],lbl_cond:["Состояние","Stare","Condition"],lbl_city:["Город","Oraș","City"],
 co_title:["Оформление заказа","Finalizarea comenzii","Checkout"],co_name:["Имя и фамилия","Nume și prenume","Full name"],co_phone:["Телефон","Telefon","Phone"],co_city:["Город доставки","Orașul de livrare","Delivery city"],
@@ -424,52 +450,26 @@ tr3:["Вы получили вещь, у вас 3 дня на осмотр","Ai 
 tr_ship:["Продавец отправил (демо)","Vânzătorul a expediat (demo)","Seller shipped (demo)"],tr_recv:["Я получил вещь (демо)","Am primit articolul (demo)","I received it (demo)"],
 tr_ok:["Всё в порядке, выплатить продавцу","Totul e în regulă, plătește vânzătorul","All good, pay the seller"],tr_bad:["Вещь не соответствует, вернуть деньги","Articolul nu corespunde, returnează banii","Item does not match, refund me"],
 tr_done:["Сделка завершена. Продавец получил оплату.","Tranzacție încheiată. Vânzătorul a primit plata.","Deal complete. The seller has been paid."],
-tr_refund:["Деньги возвращены вам полностью. Вещь отправлена на экспертную проверку.","Banii v-au fost returnați integral. Articolul a fost trimis la verificare de către expert.","Your money was fully refunded. The item was sent for expert review."],
-sl_title:["Продать вещь","Vinde un articol","Sell an item"],sl_sub:["Загрузите 4 фотографии. ИИ проверит подлинность за несколько секунд.","Încarcă 4 fotografii. AI-ul verifică autenticitatea în câteva secunde.","Upload 4 photos. AI checks authenticity in a few seconds."],
+tr_refund:["Деньги возвращены вам полностью.","Banii v-au fost returnați integral.","Your money was fully refunded."],
+sl_title:["Продать вещь","Vinde un articol","Sell an item"],sl_sub:["Добавьте фото и цену. Объявление появится в каталоге сразу.","Adaugă fotografii și prețul. Anunțul apare imediat în catalog.","Add photos and a price. Your listing appears in the catalog right away."],
 f_brand:["Бренд (если есть)","Brand (dacă există)","Brand (if any)"],f_type:["Тип вещи","Tip articol","Item type"],f_size:["Размер","Mărime","Size"],f_cond:["Состояние","Stare","Condition"],f_city:["Город","Oraș","City"],f_price:["Ваша цена, MDL","Prețul tău, MDL","Your price, MDL"],
 pr_buyer:["Покупатель увидит","Cumpărătorul va vedea","Buyer will see"],pr_you:["Вы получите","Vei primi","You receive"],
 pr_note:["К вашей цене добавляется наценка Re:Wear 15%.","La prețul tău se adaugă adaosul Re:Wear de 15%.","A 15% Re:Wear markup is added to your price."],
 f_desc:["Описание","Descriere","Description"],
 desc_ph:["Дефекты, замеры, где куплена, причина продажи, чек или бирка в комплекте","Defecte, măsurători, unde a fost cumpărat, motivul vânzării, bon sau etichetă în set","Flaws, measurements, where it was bought, reason for selling, receipt or tags included"],
-f_photos:["Фотографии","Fotografii","Photos"],p1:["Общий вид","Vedere de ansamblu","Overall"],p2:["Наружная бирка","Eticheta exterioară","Outer label"],p3:["Внутренний ярлык","Eticheta interioară","Inner label"],p4:["Фурнитура и шов","Accesorii și cusătură","Hardware and seam"],
-add_photo:["Добавить","Adaugă","Add"],submit:["Отправить на проверку","Trimite la verificare","Submit for check"],
-demo_sel:["Демо: результат ИИ","Demo: rezultat AI","Demo: AI result"],d_auto:["Авто","Auto","Auto"],d_ok:["Уверен","Sigur","Confident"],d_doubt:["Сомневается","Are dubii","Unsure"],d_bad:["Отказ","Respins","Rejected"],
-err_fields:["Заполните размер и цену и добавьте все 4 фотографии.","Completează mărimea și prețul și adaugă toate cele 4 fotografii.","Fill in size and price, and add all 4 photos."],
-demo_note:["Демо: оценка ИИ имитируется, настоящая модель подключается на сервере.","Demo: evaluarea AI este simulată, modelul real se conectează pe server.","Demo: the AI score is simulated, a real model connects on the server."],
-ai1:["Читаю бирки и надписи","Citesc etichetele și inscripțiile","Reading labels and text"],ai2:["Сверяю шрифт и логотип с эталоном","Compar fontul și logo-ul cu originalul","Matching font and logo to the original"],
-ai3:["Проверяю фурнитуру и швы","Verific accesoriile și cusăturile","Checking hardware and seams"],ai4:["Считаю уверенность","Calculez încrederea","Calculating confidence"],
-res_ok_h:["Подлинность подтверждена","Autenticitate confirmată","Authenticity confirmed"],res_ok_p:["Вещь опубликована в каталоге.","Articolul a fost publicat în catalog.","The item is published in the catalog."],
-res_d_h:["ИИ сомневается, нужна проверка человеком","AI-ul are dubii, e nevoie de verificare umană","AI is unsure, a person needs to review"],
-res_d_p:["Фотографии переданы эксперту. Вещь появится в каталоге после одобрения.","Fotografiile au fost trimise unui expert. Articolul apare în catalog după aprobare.","Photos were sent to an expert. The item appears in the catalog after approval."],
-res_b_h:["Не удалось подтвердить подлинность","Autenticitatea nu a putut fi confirmată","Authenticity could not be confirmed"],
-res_b_p:["Переснимите бирки и швы при дневном свете и отправьте снова.","Refă fotografiile etichetelor și cusăturilor la lumină naturală și trimite din nou.","Retake the labels and seams in daylight and submit again."],
-go_cat:["В каталог","La catalog","To catalog"],go_rev:["Открыть очередь эксперта","Deschide coada expertului","Open expert queue"],
-r_n1:["Фотографии чёткие, вещь соответствует описанию","Fotografiile sunt clare, articolul corespunde descrierii","Photos are clear and the item matches the description"],
-r_n2:["Состояние совпадает с заявленным","Starea corespunde cu cea declarată","Condition matches what is stated"],
-r_n3:["Признаков подделки под известный бренд нет","Nu sunt semne de imitație a unui brand cunoscut","No signs of imitating a known brand"],
-r_ok1:["Шрифт и логотип на бирке совпадают с эталоном","Fontul și logo-ul de pe etichetă corespund originalului","Font and logo on the label match the original"],
-r_ok2:["Состав и страна производства читаются","Compoziția și țara de fabricație sunt lizibile","Fabric and country of origin are legible"],
-r_ok3:["Фурнитура и строчка без отличий","Accesoriile și cusăturile nu au diferențe","Hardware and stitching show no differences"],
-r_d1:["Строчка у фурнитуры отличается от эталона","Cusătura de lângă accesorii diferă de original","Stitching near the hardware differs from the original"],
-r_d2:["Внутренний ярлык частично нечитаем","Eticheta interioară este parțial ilizibilă","Inner label is partly unreadable"],
-r_b1:["Шрифт на бирке не совпадает с эталоном","Fontul de pe etichetă nu corespunde originalului","Label font does not match the original"],
-r_b2:["Признаки подделки на фурнитуре","Semne de contrafacere la accesorii","Signs of counterfeiting on the hardware"],
-rv_title:["Очередь эксперта","Coada expertului","Expert queue"],rv_sub:["Вещи, в которых ИИ не уверен. Решение принимает человек.","Articole în care AI-ul nu e sigur. Decizia aparține unui om.","Items the AI is unsure about. A person makes the call."],
-rv_empty:["Очередь пуста.","Coada este goală.","The queue is empty."],approve:["Подтвердить","Confirmă","Approve"],reject:["Отклонить","Respinge","Reject"],
-rv_notes:["Замечания ИИ","Observațiile AI","AI notes"],rv_ex:["Пример","Exemplu","Example"],
-no_photos:["Фотографии не загружены (пример)","Fotografii neîncărcate (exemplu)","No photos uploaded (example)"],
-how_title:["Как работает Re:Wear","Cum funcționează Re:Wear","How Re:Wear works"],
-h1_t:["Проверка подлинности","Verificarea autenticității","Authenticity check"],
-h1_p:["От 85% уверенности ИИ вещь публикуется сразу. От 55% до 84% фотографии смотрит эксперт. Ниже 55% мы просим переснять фотографии.","De la 85% încredere AI articolul se publică imediat. Între 55% și 84% fotografiile ajung la un expert. Sub 55% cerem fotografii noi.","From 85% AI confidence an item is published right away. From 55% to 84% an expert reviews the photos. Below 55% we ask for new photos."],
+f_photos:["Фотографии","Fotografii","Photos"],p1:["Главное фото","Fotografia principală","Main photo"],p2:["Фото 2","Foto 2","Photo 2"],p3:["Фото 3","Foto 3","Photo 3"],p4:["Фото 4","Foto 4","Photo 4"],
+add_photo:["Добавить","Adaugă","Add"],submit:["Опубликовать","Publică","Publish"],
+err_fields:["Заполните размер и цену и добавьте главное фото.","Completează mărimea și prețul și adaugă fotografia principală.","Fill in size and price, and add the main photo."],
+res_ok_h:["Объявление опубликовано","Anunț publicat","Listing published"],res_ok_p:["Оно уже в каталоге. Цену и статус можно менять в «Мои объявления».","Este deja în catalog. Prețul și starea se pot schimba în «Anunțurile mele».","It is already in the catalog. You can change the price and status in “My listings”."],
+go_cat:["В каталог","La catalog","To catalog"],how_title:["Как работает Re:Wear","Cum funcționează Re:Wear","How Re:Wear works"],
 h2_t:["Покупателю","Cumpărătorului","For buyers"],
-h2_p:["Деньги блокируются на счёте Re:Wear. После получения у вас 3 дня на осмотр. Если вещь не соответствует описанию или не оригинал, возвращаем всю сумму.","Banii sunt blocați în contul Re:Wear. După primire ai 3 zile pentru verificare. Dacă articolul nu corespunde descrierii sau nu e original, returnăm toată suma.","Your money is held by Re:Wear. After delivery you have 3 days to inspect. If the item does not match or is not original, you get a full refund."],
+h2_p:["Деньги блокируются на счёте Re:Wear. После получения у вас 3 дня на осмотр. Если вещь не соответствует описанию, возвращаем всю сумму.","Banii sunt blocați în contul Re:Wear. După primire ai 3 zile pentru verificare. Dacă articolul nu corespunde descrierii, returnăm toată suma.","Your money is held by Re:Wear. After delivery you have 3 days to inspect. If the item does not match the description, you get a full refund."],
 h3_t:["Продавцу","Vânzătorului","For sellers"],
 h3_p:["Вы назначаете цену, мы добавляем 15% к цене для покупателя. Вам выплачивается ровно ваша цена. Вещь вы отправляете через почту Re:Wear.","Tu stabilești prețul, noi adăugăm 15% la prețul pentru cumpărător. Primești exact prețul tău. Articolul îl expediezi prin poșta Re:Wear.","You set the price and we add 15% to the buyer price. You are paid exactly your price. You ship the item through Re:Wear post."],
 h_ex:["Пример: вы просите 1000 MDL, покупатель платит 1150 MDL, вам выплачивается 1000 MDL.","Exemplu: ceri 1000 MDL, cumpărătorul plătește 1150 MDL, tu primești 1000 MDL.","Example: you ask 1000 MDL, the buyer pays 1150 MDL, you are paid 1000 MDL."],
 foot_region:["Работаем в Молдове и Приднестровье: Кишинёв, Бельцы, Тирасполь, Бендеры, Рыбница и другие города.","Funcționăm în Moldova și în Transnistria: Chișinău, Bălți, Tiraspol, Bender, Rîbnița și alte orașe.","We serve Moldova and Transnistria: Chișinău, Bălți, Tiraspol, Bender, Rîbnița and other cities."],
 foot_rate:["Курс PRB ориентировочный: 1 MDL = {r} PRB.","Cursul PRB este orientativ: 1 MDL = {r} PRB.","The PRB rate is approximate: 1 MDL = {r} PRB."],
-t_pub:["Вещь опубликована","Articol publicat","Item published"],t_queue:["Отправлено эксперту","Trimis la expert","Sent to expert"],t_rej:["Заявка отклонена","Cerere respinsă","Request rejected"],t_appr:["Одобрено, вещь в каталоге","Aprobat, articolul e în catalog","Approved, item is in the catalog"],
-pmr:["ПМР","Transnistria","Transnistria"],
+t_pub:["Вещь опубликована","Articol publicat","Item published"],pmr:["ПМР","Transnistria","Transnistria"],
 nav_mine:["Мои объявления","Anunțurile mele","My listings"],nav_favs:["Избранное","Favorite","Favorites"],
 you:["Вы","Tu","You"],no_rating:["Нет оценок","Fără evaluări","No ratings yet"],
 fav_add:["В избранное","Adaugă la favorite","Save to favorites"],fav_del:["Убрать из избранного","Scoate din favorite","Remove from favorites"],
@@ -478,14 +478,63 @@ favs_title:["Избранное","Favorite","Favorites"],favs_count:["Сохра
 favs_empty:["В избранном пока пусто. Нажмите на сердце в карточке товара.","Nu ai favorite încă. Apasă inima de pe cardul articolului.","Nothing saved yet. Tap the heart on an item."],
 mine_title:["Мои объявления","Anunțurile mele","My listings"],mine_sub:["Управляйте ценой и статусом своих вещей.","Gestionează prețul și starea articolelor tale.","Manage the price and status of your items."],
 mine_rating:["Ваш рейтинг","Evaluarea ta","Your rating"],mine_empty:["У вас пока нет объявлений. Нажмите «Продать».","Nu ai anunțuri încă. Apasă «Vinde».","You have no listings yet. Tap “Sell”."],
-st_active:["В продаже","La vânzare","On sale"],st_sold:["Продано","Vândut","Sold"],st_review:["На проверке у эксперта","La verificare la expert","With the expert"],
-pr_save:["Сохранить цену","Salvează prețul","Save price"],price_saved:["Цена обновлена","Preț actualizat","Price updated"],
+st_active:["В продаже","La vânzare","On sale"],st_sold:["Продано","Vândut","Sold"],pr_save:["Сохранить цену","Salvează prețul","Save price"],price_saved:["Цена обновлена","Preț actualizat","Price updated"],
 mark_sold:["Отметить проданной","Marchează ca vândut","Mark as sold"],relist:["Вернуть в продажу","Pune înapoi la vânzare","Put back on sale"],
 takedown:["Снять с продажи","Retrage de la vânzare","Remove listing"],takedown_ask:["Точно снять?","Sigur retragi?","Remove for sure?"],
-withdraw:["Отозвать заявку","Retrage cererea","Withdraw request"],removed:["Объявление снято","Anunț retras","Listing removed"],
+removed:["Объявление снято","Anunț retras","Listing removed"],
 rated_me:["Покупатель оценил вас на {n} из 5 (демо)","Cumpărătorul te-a evaluat cu {n} din 5 (demo)","A buyer rated you {n} out of 5 (demo)"],
 rate_h:["Оцените продавца","Evaluează vânzătorul","Rate the seller"],rate_thanks:["Спасибо! Вы поставили {n} из 5.","Mulțumim! Ai dat {n} din 5.","Thanks! You gave {n} out of 5."],
 own_item:["Это ваше объявление","Acesta este anunțul tău","This is your listing"],
+login:["Войти","Intră","Log in"],register:["Регистрация","Înregistrare","Sign up"],logout:["Выйти","Ieși","Log out"],
+au_name:["Имя","Nume","Name"],au_phone:["Номер телефона","Număr de telefon","Phone number"],au_pass:["Пароль (от 8 символов)","Parolă (minim 8 caractere)","Password (8+ characters)"],au_pass_login:["Пароль","Parolă","Password"],
+au_terms:["Согласен с правилами: только оригинальные вещи, оплата только через гарантию Re:Wear.","Sunt de acord cu regulile: doar articole originale, plată doar prin garanția Re:Wear.","I agree to the rules: genuine items only, payment only through the Re:Wear guarantee."],
+au_reg_btn:["Получить код в SMS","Primește codul prin SMS","Get SMS code"],
+au_why:["Регистрация по номеру телефона защищает покупателей и продавцов от мошенников. Один номер, один аккаунт.","Înregistrarea cu număr de telefon protejează cumpărătorii și vânzătorii de fraudă. Un număr, un cont.","Phone sign-up protects buyers and sellers from fraud. One number, one account."],
+au_err_name:["Укажите имя (от 2 символов).","Introdu numele (minim 2 caractere).","Enter your name (2+ characters)."],
+au_err_phone:["Введите 8 цифр номера после +373.","Introdu 8 cifre după +373.","Enter the 8 digits after +373."],
+au_err_pass:["Пароль должен быть не короче 8 символов.","Parola trebuie să aibă minim 8 caractere.","Password must be at least 8 characters."],
+au_err_terms:["Нужно согласиться с правилами.","Trebuie să accepți regulile.","You need to accept the rules."],
+au_err_dup:["Этот номер уже зарегистрирован. Войдите в аккаунт.","Acest număr este deja înregistrat. Intră în cont.","This number is already registered. Please log in."],
+au_err_login:["Неверный номер или пароль.","Număr sau parolă greșită.","Wrong number or password."],
+au_err_lock:["Слишком много попыток. Обновите страницу и попробуйте позже.","Prea multe încercări. Reîncarcă pagina și încearcă mai târziu.","Too many attempts. Reload the page and try again later."],
+au_code_t:["Подтвердите номер","Confirmă numărul","Confirm your number"],
+au_code_p:["Мы отправили 6-значный код на {p}.","Am trimis un cod din 6 cifre la {p}.","We sent a 6-digit code to {p}."],
+au_demo:["Демо: SMS не отправляется, ваш код {c}.","Demo: nu se trimite SMS, codul tău este {c}.","Demo: no SMS is sent, your code is {c}."],
+au_code_ph:["Код из SMS","Codul din SMS","SMS code"],au_code_btn:["Подтвердить","Confirmă","Confirm"],
+au_err_code:["Неверный код.","Cod greșit.","Wrong code."],au_err_code3:["Три неверные попытки. Мы отправили новый код.","Trei încercări greșite. Am trimis un cod nou.","Three wrong attempts. We sent a new code."],
+au_resend:["Отправить код снова","Trimite din nou codul","Send code again"],au_back:["Назад","Înapoi","Back"],
+au_welcome:["Добро пожаловать, {n}!","Bine ai venit, {n}!","Welcome, {n}!"],au_bye:["Вы вышли из аккаунта","Ai ieșit din cont","You logged out"],
+au_need:["Войдите в аккаунт, чтобы увидеть эту страницу.","Intră în cont pentru a vedea această pagină.","Log in to see this page."],
+au_sell_gate:["Чтобы продать вещь, войдите или зарегистрируйтесь.","Pentru a vinde, intră în cont sau înregistrează-te.","Log in or sign up to sell an item."],
+phone_ok:["телефон подтверждён","telefon confirmat","phone verified"],mine_phone:["Телефон подтверждён: {p}","Telefon confirmat: {p}","Phone verified: {p}"],
+h4_t:["Защита от мошенников","Protecție împotriva fraudei","Fraud protection"],
+h4_p:["Регистрация по номеру телефона с SMS-кодом, один номер на один аккаунт. Деньги блокируются до получения заказа, а переписка и оплата остаются внутри Re:Wear.","Înregistrare cu număr de telefon și cod SMS, un număr per cont. Banii sunt blocați până la primirea comenzii, iar conversația și plata rămân în Re:Wear.","Phone sign-up with an SMS code, one number per account. Money is held until the order arrives, and chat and payment stay inside Re:Wear."],
+rg_md:["Молдова","Moldova","Moldova"],
+au_phone_hint:["Принимаем номера Молдовы (начинаются с 6, 78 или 79) и ПМР (начинаются с 77).","Acceptăm numere din Moldova (încep cu 6, 78 sau 79) și din Transnistria (încep cu 77).","We accept Moldovan numbers (starting with 6, 78 or 79) and Transnistrian numbers (starting with 77)."],
+au_region:["Номер: {r}","Număr: {r}","Number: {r}"],
+au_err_ph:["Введите мобильный номер Молдовы или ПМР: 8 цифр после +373.","Introdu un număr mobil din Moldova sau Transnistria: 8 cifre după +373.","Enter a Moldovan or Transnistrian mobile number: 8 digits after +373."],
+au_err_nouser:["Аккаунт с этим номером не найден. Зарегистрируйтесь.","Nu există cont cu acest număr. Înregistrează-te.","No account with this number. Please sign up."],
+cs_title:["Конфиденциальность","Confidențialitate","Privacy"],
+cs_intro:["Прежде чем продолжить, ознакомьтесь с условиями работы Re:Wear.","Înainte de a continua, citește condițiile de funcționare Re:Wear.","Before you continue, please read how Re:Wear works."],
+cs_link:["Конфиденциальность","Confidențialitate","Privacy"],
+cs_check:["Я подтверждаю, что ознакомился с конфиденциальностью","Confirm că am citit politica de confidențialitate","I confirm that I have read the privacy policy"],
+cs_btn:["Продолжить","Continuă","Continue"],
+pay_method:["Способ оплаты","Metodă de plată","Payment method"],
+pay_clever:["Карта «Клевер»","Card «Clever»","Clever card"],
+pay_clever_sub:["Сумма к оплате в приднестровских рублях","Suma de plată în ruble transnistrene","Amount shown in Transnistrian rubles"],
+pay_note:["Карта «Клевер» работает в ПМР. Способы оплаты для Молдовы появятся позже.","Cardul «Clever» funcționează în Transnistria. Metodele de plată pentru Moldova vor apărea mai târziu.","The Clever card works in Transnistria. Payment methods for Moldova will be added later."],
+pay_go:["Перейти к оплате {p}","Mergi la plata de {p}","Go to payment {p}"],
+pay_secure_t:["Защищённая страница оплаты (демо)","Pagina de plată securizată (demo)","Secure payment page (demo)"],
+pay_secure_p:["Здесь будет страница платёжного сервиса. Данные карты вводятся только на ней: Re:Wear их не получает и не хранит. В демо ничего вводить не нужно.","Aici va fi pagina serviciului de plată. Datele cardului se introduc doar acolo: Re:Wear nu le primește și nu le păstrează. În demo nu trebuie să introduci nimic.","The payment service page will be here. Card details are entered only there: Re:Wear never receives or stores them. Nothing needs to be entered in this demo."],
+pay_amount:["К оплате","De plată","To pay"],
+pay_confirm:["Подтвердить оплату (демо)","Confirmă plata (demo)","Confirm payment (demo)"],
+pay_cancel:["Отмена","Anulează","Cancel"],
+cs_p1:["Re:Wear — площадка-посредник между продавцами и покупателями. Мы не продаём вещи сами и не являемся их владельцем, производителем или продавцом.","Re:Wear este o platformă intermediară între vânzători și cumpărători. Nu vindem articolele noi înșine și nu suntem proprietarul, producătorul sau vânzătorul lor.","Re:Wear is an intermediary platform between sellers and buyers. We do not sell items ourselves and are not their owner, manufacturer or seller."],
+cs_p2:["Продавец отвечает за вещь, её описание, состояние и подлинность. Re:Wear не несёт ответственности за товар.","Vânzătorul răspunde pentru articol, descrierea, starea și autenticitatea lui. Re:Wear nu poartă răspundere pentru produs.","The seller is responsible for the item, its description, condition and authenticity. Re:Wear is not responsible for the goods."],
+cs_p3:["Единственное исключение — «Гарантия покупки»: при оплате через Re:Wear деньги удерживаются до получения заказа, на осмотр даётся 3 дня, и при несоответствии описанию покупателю возвращается вся сумма.","Singura excepție este «Garanția cumpărăturii»: la plata prin Re:Wear banii sunt reținuți până la primirea comenzii, ai 3 zile pentru verificare, iar dacă articolul nu corespunde descrierii, cumpărătorului i se returnează întreaga sumă.","The only exception is the «Purchase guarantee»: when you pay through Re:Wear the money is held until you receive the order, you have 3 days to inspect it, and if the item does not match the description, the buyer is refunded in full."],
+cs_p4:["Сделки и оплата вне Re:Wear не защищены гарантией. Платите только через сайт.","Tranzacțiile și plățile în afara Re:Wear nu sunt protejate de garanție. Plătește doar prin site.","Deals and payments outside Re:Wear are not covered by the guarantee. Pay only through the site."],
+cs_p5:["Для регистрации мы просим имя и номер телефона (Молдова или ПМР) и подтверждаем номер SMS-кодом. Номер нужен для входа и защиты от мошенников и другим пользователям не показывается. Данные банковской карты Re:Wear не получает и не хранит: оплата проходит на стороне платёжного сервиса.","Pentru înregistrare cerem numele și numărul de telefon (Moldova sau Transnistria) și confirmăm numărul prin cod SMS. Numărul este necesar pentru autentificare și protecție împotriva fraudei și nu este afișat altor utilizatori. Re:Wear nu primește și nu păstrează datele cardului bancar: plata se face la serviciul de plată.","To register we ask for your name and phone number (Moldova or Transnistria) and confirm the number with an SMS code. The number is used for login and fraud protection and is not shown to other users. Re:Wear does not receive or store bank card details: payment is handled by the payment service."],
+cs_p6:["Мы можем заблокировать аккаунт и снять объявление при подозрении на мошенничество или подделку.","Putem bloca contul și retrage anunțul în caz de suspiciune de fraudă sau contrafacere.","We may block an account and remove a listing if fraud or counterfeiting is suspected."],
 th_light:["Светлая тема","Temă luminoasă","Light theme"],th_dark:["Тёмная тема","Temă întunecată","Dark theme"],
 nav_chats:["Чаты","Mesaje","Chats"],
 fl_gender:["Для кого","Pentru cine","For"],fl_gender_all:["Все","Toți","Everyone"],gn_f:["Женское","Femei","Women"],gn_m:["Мужское","Bărbați","Men"],gn_k:["Детское","Copii","Kids"],
@@ -511,9 +560,8 @@ var CITIES=[{id:"chi",ru:"Кишинёв",la:"Chișinău"},{id:"bal",ru:"Бел�
 {id:"tir",ru:"Тирасполь",la:"Tiraspol",pmr:1},{id:"ben",ru:"Бендеры",la:"Bender",pmr:1},{id:"rib",ru:"Рыбница",la:"Rîbnița",pmr:1},{id:"dub",ru:"Дубоссары",la:"Dubăsari",pmr:1},{id:"slo",ru:"Слободзея",la:"Slobozia",pmr:1}];
 var CATOF={tee:"tops",hoodie:"tops",jeans:"bottoms",jacket:"outer",sneakers:"shoes",dress:"dress"};
 var COLORS={tee:"#B08A4F",hoodie:"#2B2F36",jeans:"#3E5C8A",jacket:"#D1493A",sneakers:"#E9E9E4",dress:"#2E7D6B"};
-var KNOWN=["levi","nike","adidas","zara","north face","carhartt","puma","ralph lauren","tommy","calvin klein","new balance","converse","reebok","lacoste","champion"];
 
-var S={q:"",cat:"all",fg:"all",favs:[],delAsk:null,fs:"",fmin:0,fmax:0,chats:{},chatOpen:null,sort:"new",nextId:100,order:null,modalFn:null,photos:[null,null,null,null],busy:false,
+var S={q:"",cat:"all",fg:"all",favs:[],delAsk:null,user:null,accounts:[],nextUser:0,loginFails:0,auth:null,afterAuth:null,fs:"",fmin:0,fmax:0,chats:{},chatOpen:null,sort:"new",nextId:100,order:null,modalFn:null,photos:[null,null,null,null],busy:false,
 products:[
  {id:1,brand:"Levi's",type:"jeans",size:"W32/L32",cond:"great",city:"chi",price:650,color:"#3E5C8A",status:"ai",score:97},
  {id:2,brand:"Nike",type:"sneakers",size:"EU 42",cond:"good",city:"tir",price:900,color:"#E9E9E4",status:"expert",score:71},
@@ -521,15 +569,13 @@ products:[
  {id:4,brand:"The North Face",type:"jacket",size:"L",cond:"good",city:"chi",price:2100,color:"#D1493A",status:"expert",score:68},
  {id:5,brand:"Zara",type:"dress",size:"S",cond:"new",city:"ben",price:320,color:"#2E7D6B",status:"ai",score:91},
  {id:6,brand:"Carhartt",type:"tee",size:"M",cond:"great",city:"rib",price:260,color:"#B08A4F",status:"ai",score:96}],
-queue:[{id:99,brand:"Adidas",type:"sneakers",size:"EU 43",cond:"good",city:"dub",price:700,color:"#F1F1EE",score:63,reasons:["r_d1","r_d2"],photos:[],example:true}]
 };
 
 var GENDER={1:"m",2:"m",3:"f",4:"m",5:"f",6:"m"};
 var SELLER={1:"s1",2:"s2",3:"s3",4:"s1",5:"s4",6:"s2"};
-var SELLERS={s1:{name:"Ion M.",sum:110,count:23},s2:{name:"Elena V.",sum:55,count:12},s3:{name:"Andrei C.",sum:150,count:31},s4:{name:"Maria T.",sum:37,count:8},me:{sum:0,count:0}};
+var SELLERS={s1:{name:"Ion M.",sum:110,count:23},s2:{name:"Elena V.",sum:55,count:12},s3:{name:"Andrei C.",sum:150,count:31},s4:{name:"Maria T.",sum:37,count:8}};
 var FAV_MAX=20;
 S.products.forEach(function(p){p.gender=GENDER[p.id];p.seller=SELLER[p.id]});
-S.queue.forEach(function(q){q.gender="m";q.seller="s3"});
 
 function $(s,r){return (r||document).querySelector(s)}
 function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
@@ -552,10 +598,6 @@ function art(type,color){
   dress:'<path d="M38 10H62L60 32 74 90H26L40 32Z"/><path fill="none" d="M40 32H60"/>'};
  return '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="'+color+'" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">'+(P[type]||P.tee)+'</g></svg>';
 }
-function meter(s){
- var c=s>=85?"":(s>=55?"warn":"bad");
- return '<div class="meter" role="img" aria-label="'+s+'%"><div class="track"><i class="'+c+'" style="width:'+s+'%"></i><b style="left:55%"></b><b style="left:85%"></b></div><div class="scale"><span>0</span><span style="left:55%">55</span><span style="left:85%">85</span></div></div>';
-}
 function ttl(p){return (p.brand?esc(p.brand)+' ':'')+t("ty_"+p.type)}
 function find(id){return S.products.filter(function(p){return p.id===+id})[0]}
 
@@ -568,7 +610,7 @@ function applyI18n(){
  document.documentElement.lang=LANGS[L];
  $$("[data-i18n]").forEach(function(n){n.textContent=t(n.getAttribute("data-i18n"))});
  $$("[data-i18n-ph]").forEach(function(n){n.placeholder=t(n.getAttribute("data-i18n-ph"))});
- $$("#langSeg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.lang===LANGS[L]))});
+ $$("#langSeg button,#csLang button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.lang===LANGS[L]))});
  $$("#curSeg button").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.cur===CUR))});
  fillSelect($("#sort"),[["new",t("sort_new")],["asc",t("sort_asc")],["desc",t("sort_desc")]]);
  var types=["tee","hoodie","jeans","jacket","sneakers","dress"];
@@ -578,22 +620,23 @@ function applyI18n(){
  fillSelect($("#gender"),[["f",t("gn_f")],["m",t("gn_m")],["k",t("gn_k")]]);
  fillSelect($("#fGender"),[["all",t("fl_gender_all")],["f",t("gn_f")],["m",t("gn_m")],["k",t("gn_k")]]);
  $("#fMinL").textContent=t("fl_min")+", "+CUR;$("#fMaxL").textContent=t("fl_max")+", "+CUR;
- fillSelect($("#demo"),[["auto",t("d_auto")],["ok",t("d_ok")],["doubt",t("d_doubt")],["bad",t("d_bad")]]);
  $("#chips").innerHTML=["all","tops","bottoms","outer","shoes","dress"].map(function(k){return '<button class="chip" data-cat="'+k+'" aria-pressed="'+(S.cat===k)+'">'+t("c_"+k)+'</button>'}).join("");
  $("#rate").textContent=t("foot_rate",{r:RATE});
+ $("#csText").innerHTML=policyParas();
  $$("#themeSeg button").forEach(function(b){var lbl=t(b.dataset.theme==="dark"?"th_dark":"th_light");b.setAttribute("aria-label",lbl);b.title=lbl;b.setAttribute("aria-pressed",String(b.dataset.theme===effTheme()))});
- renderAll();updatePrice();
+ updateAcct();renderAll();updatePrice();
  if(S.modalFn)$("#modalBody").innerHTML=S.modalFn();
 }
 
 /* ---------- catalog ---------- */
 function thumb(p){var ph=(p.photos||[])[0];return '<div class="art'+(ph?' ph':'')+'">'+(ph?'<img src="'+ph+'" alt="">':art(p.type,p.color))+'</div>'}
 function heart(){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.6-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.4-9.5 9-9.5 9Z"/></svg>'}
-function sname(sid){return sid==="me"?t("you"):(SELLERS[sid]?SELLERS[sid].name:"")}
+function sname(sid){return SELLERS[sid]?SELLERS[sid].name:""}
+function me(){return S.user?S.user.id:"__none"}
 function ratingText(sid){var r=SELLERS[sid];if(!r||!r.count)return t("no_rating");return "★ "+new Intl.NumberFormat(LANGS[L],{minimumFractionDigits:1,maximumFractionDigits:1}).format(r.sum/r.count)+" ("+r.count+")"}
 function card(p){
  var fv=S.favs.indexOf(p.id)>-1,fl=t(fv?"fav_del":"fav_add");
- var badge=p.sold?'<span class="badge sd">'+t("st_sold")+'</span>':'<span class="badge '+(p.status==="ai"?"ok":"ex")+'">'+t(p.status==="ai"?"b_ai":"b_expert")+'</span>';
+ var badge=p.sold?'<span class="badge sd">'+t("st_sold")+'</span>':'<span class="badge ok">'+t("m_guar")+'</span>';
  return '<div class="cw"><button class="card" data-id="'+p.id+'">'+thumb(p)+'<div class="cbody">'+badge+'<h3>'+ttl(p)+'</h3><p class="meta">'+esc(p.size)+' · '+t("cond_"+p.cond)+' · '+cityName(p.city)+'</p><p class="rate">'+ratingText(p.seller)+'</p><p class="price"><b>'+money(buyer(p.price))+'</b><small>'+money2(buyer(p.price))+'</small></p></div></button><button class="fav" data-fav="'+p.id+'" aria-pressed="'+fv+'" aria-label="'+fl+'" title="'+fl+'">'+heart()+'</button></div>';
 }
 function galleryHTML(p){
@@ -605,7 +648,7 @@ function actions(p){
  var fv=S.favs.indexOf(p.id)>-1;
  var fb='<button class="btn" id="favBtn" data-act="fav" data-id="'+p.id+'">'+t(fv?"fav_del":"fav_add")+'</button>';
  if(p.sold)return '<p class="result warn"><b>'+t("st_sold")+'</b></p><div class="qact">'+fb+'</div>';
- if(p.seller==="me")return '<p class="note">'+t("own_item")+'</p>';
+ if(p.seller===me())return '<p class="note">'+t("own_item")+'</p>';
  return '<div class="qact"><button class="btn primary" data-act="buy" data-id="'+p.id+'">'+t("buy")+'</button><button class="btn" data-act="chat" data-id="'+p.id+'">'+t("chat_btn")+'</button>'+fb+'</div>';
 }
 function renderCatalog(){
@@ -616,23 +659,27 @@ function renderCatalog(){
  $("#grid").innerHTML=list.map(card).join("")||'<p class="muted">'+t("none")+'</p>';
 }
 function productHTML(p){
- var vtxt=p.status==="ai"?t("m_ai"):t("m_ex");
  return '<h2>'+ttl(p)+'</h2><div class="mgrid"><div>'+galleryHTML(p)+'</div><div>'+
  '<div><p class="big">'+money(buyer(p.price))+'</p><p class="note">'+money2(buyer(p.price))+' · '+t("incl")+'</p></div>'+
- '<dl class="kv"><dt>'+t("lbl_size")+'</dt><dd>'+esc(p.size)+'</dd><dt>'+t("lbl_cond")+'</dt><dd>'+t("cond_"+p.cond)+'</dd><dt>'+t("f_gender")+'</dt><dd>'+t("gn_"+p.gender)+'</dd><dt>'+t("lbl_city")+'</dt><dd>'+cityName(p.city)+'</dd><dt>'+t("seller")+'</dt><dd>'+esc(sname(p.seller))+' · '+ratingText(p.seller)+'</dd></dl>'+
+ '<dl class="kv"><dt>'+t("lbl_size")+'</dt><dd>'+esc(p.size)+'</dd><dt>'+t("lbl_cond")+'</dt><dd>'+t("cond_"+p.cond)+'</dd><dt>'+t("f_gender")+'</dt><dd>'+t("gn_"+p.gender)+'</dd><dt>'+t("lbl_city")+'</dt><dd>'+cityName(p.city)+'</dd><dt>'+t("seller")+'</dt><dd>'+esc(sname(p.seller))+' · '+ratingText(p.seller)+' · ✓ '+t("phone_ok")+'</dd></dl>'+
  (p.desc?'<div><p class="mono muted" style="margin-bottom:4px">'+t("f_desc")+'</p><p class="desc">'+esc(p.desc)+'</p></div>':'')+
- '<div><span class="badge '+(p.status==="ai"?"ok":"ex")+'">'+t("m_verif")+'</span><p style="margin:8px 0">'+vtxt+'</p><p class="mono muted" style="margin-bottom:6px">'+t("m_score")+' '+p.score+'%</p>'+meter(p.score)+'</div>'+
  '<div><p class="mono muted" style="margin-bottom:6px">'+t("m_guar")+'</p><ul class="glist"><li>'+t("g1")+'</li><li>'+t("g2")+'</li><li>'+t("g3")+'</li></ul></div>'+
  actions(p)+'</div></div>';
 }
 function checkoutHTML(p){
  var opts=CITIES.map(function(c){return '<option value="'+c.id+'">'+esc(cityName(c.id))+'</option>'}).join("");
- return '<h2>'+t("co_title")+'</h2><div class="mgrid"><div><div class="art">'+art(p.type,p.color)+'</div><p><b>'+ttl(p)+'</b></p><p class="big">'+money(buyer(p.price))+'</p><p class="note">'+money2(buyer(p.price))+'</p></div><div>'+
- '<label class="field"><span>'+t("co_name")+'</span><input id="coName" type="text" autocomplete="name"></label>'+
+ var prb=fmt(buyer(p.price),"PRB");
+ return '<h2>'+t("co_title")+'</h2><div class="mgrid"><div>'+thumb(p)+'<p><b>'+ttl(p)+'</b></p><p class="big">'+money(buyer(p.price))+'</p><p class="note">'+money2(buyer(p.price))+'</p></div><div>'+
+ '<label class="field"><span>'+t("co_name")+'</span><input id="coName" type="text" autocomplete="name" value="'+esc(S.user?S.user.name:"")+'"></label>'+
  '<label class="field"><span>'+t("co_phone")+'</span><input id="coPhone" type="text" inputmode="tel" autocomplete="tel" placeholder="+373 ..."></label>'+
  '<label class="field"><span>'+t("co_city")+'</span><select id="coCity">'+opts+'</select></label>'+
+ '<div><p class="mono muted" style="margin-bottom:6px">'+t("pay_method")+'</p><div class="paym"><span class="radio"></span><div><b>'+t("pay_clever")+'</b><p class="note">'+t("pay_clever_sub")+': '+prb+'</p></div></div><p class="note" style="margin-top:6px">'+t("pay_note")+'</p></div>'+
  '<p class="note">'+t("co_note")+'</p><p class="err" id="coErr" role="alert"></p>'+
- '<button class="btn primary" data-act="pay" data-id="'+p.id+'">'+t("co_pay",{p:money(buyer(p.price))})+'</button></div></div>';
+ '<button class="btn primary" data-act="pay" data-id="'+p.id+'">'+t("pay_go",{p:prb})+'</button></div></div>';
+}
+function payHTML(){
+ var p=S.pending.p,prb=fmt(buyer(p.price),"PRB");
+ return '<h2>'+t("pay_secure_t")+'</h2><div class="mgrid"><div><p class="mono muted">'+t("pay_amount")+'</p><p class="big">'+prb+'</p><p class="note">'+money2(buyer(p.price))+'</p><p class="muted" style="margin-top:8px">'+ttl(p)+'</p></div><div><p class="demo">'+t("pay_secure_p")+'</p><div class="qact"><button class="btn primary" data-act="paydone">'+t("pay_confirm")+'</button><button class="btn" data-act="paycancel" data-id="'+p.id+'">'+t("pay_cancel")+'</button></div></div></div>';
 }
 function trackerHTML(){
  var o=S.order,p=o.p,st=o.stage,steps=["tr1","tr2","tr3","tr4"];
@@ -651,7 +698,7 @@ function trackerHTML(){
 function setModal(fn,cid){S.chatOpen=cid||null;S.modalFn=fn;$("#modalBody").innerHTML=fn();$("#overlay").hidden=false;}
 var lastFocus=null;
 function openModal(fn){lastFocus=document.activeElement;setModal(fn);$("#mclose").focus();}
-function closeModal(){$("#overlay").hidden=true;$("#modalBody").innerHTML="";S.modalFn=null;S.chatOpen=null;if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+function closeModal(){$("#overlay").hidden=true;$("#modalBody").innerHTML="";S.modalFn=null;S.chatOpen=null;S.afterAuth=null;if(lastFocus&&lastFocus.focus)lastFocus.focus();}
 
 /* ---------- sell ---------- */
 function updatePrice(){
@@ -661,17 +708,6 @@ function updatePrice(){
  $("#pbuyer").textContent=money(b)+" ≈ "+money2(b);
  $("#pyou").textContent=money(v)+" ≈ "+money2(v);
 }
-function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h}
-function computeScore(f){
- var h=hash(f.brand.toLowerCase()+f.type+f.size)%14, d=f.demo;
- if(d==="ok")return 94+h%5;
- if(d==="doubt")return 62+h;
- if(d==="bad")return 24+h*2;
- if(!f.brand)return 86+h%10;
- var known=KNOWN.some(function(k){return f.brand.toLowerCase().indexOf(k)>-1});
- var s=58+(known?16:0)+(f.price>=80&&f.price<=6000?6:0)+h+8;
- return Math.max(40,Math.min(98,s));
-}
 function resetForm(){
  ["brand","size","price","desc"].forEach(function(i){$("#"+i).value=""});
  S.photos=[null,null,null,null];
@@ -679,46 +715,153 @@ function resetForm(){
  $$(".slot input").forEach(function(i){i.value=""});
  updatePrice();
 }
-function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
-async function runCheck(f){
- var box=$("#run");S.busy=true;$("#submit").disabled=true;
- var keys=["ai1","ai2","ai3","ai4"];
- box.innerHTML='<ul class="steps">'+keys.map(function(k){return '<li><span class="dot"></span>'+t(k)+'</li>'}).join("")+'</ul>';
- var lis=$$(".steps li",box);
- for(var i=0;i<lis.length;i++){await sleep(520);lis[i].classList.add("done");}
- await sleep(250);
- var score=computeScore(f),kind=score>=85?"ok":score>=55?"warn":"bad";
- var reasons=kind==="ok"?(f.brand?["r_ok1","r_ok2","r_ok3"]:["r_n1","r_n2","r_n3"]):kind==="warn"?["r_d1","r_d2","r_ok1"]:["r_b1","r_b2"];
- var base={brand:f.brand,type:f.type,size:f.size,cond:f.cond,gender:f.gender,city:f.city,price:f.price,desc:f.desc,photos:f.photos,seller:"me",color:COLORS[f.type],score:score};
- var head,body,links="";
- if(kind==="ok"){S.nextId++;S.products.push(Object.assign({id:S.nextId,status:"ai"},base));head=t("res_ok_h");body=t("res_ok_p");links='<a class="btn" href="#catalog">'+t("go_cat")+'</a><a class="btn" href="#mine">'+t("nav_mine")+'</a>';showToast(t("t_pub"));}
- else if(kind==="warn"){S.nextId++;S.queue.unshift(Object.assign({id:S.nextId,reasons:reasons,photos:S.photos.filter(Boolean)},base));head=t("res_d_h");body=t("res_d_p");links='<a class="btn" href="#review">'+t("go_rev")+'</a><a class="btn" href="#mine">'+t("nav_mine")+'</a>';showToast(t("t_queue"));}
- else{head=t("res_b_h");body=t("res_b_p");}
- box.innerHTML='<div class="result '+kind+'"><h3>'+head+'</h3><p>'+body+'</p><p class="mono" style="color:var(--ink)">'+t("m_score")+' '+score+'%</p>'+meter(score)+'<ul>'+reasons.map(function(r){return '<li>'+t(r)+'</li>'}).join("")+'</ul>'+(links?'<div class="row">'+links+'</div>':'')+'</div>';
- if(kind!=="bad")resetForm();
- renderAll();
- S.busy=false;$("#submit").disabled=false;
+function publishListing(f){
+ var box=$("#run");
+ S.nextId++;
+ S.products.push({id:S.nextId,brand:f.brand,type:f.type,size:f.size,cond:f.cond,gender:f.gender,city:f.city,price:f.price,desc:f.desc,photos:f.photos.filter(Boolean),seller:me(),color:COLORS[f.type]});
+ box.innerHTML='<div class="result ok"><h3>'+t("res_ok_h")+'</h3><p>'+t("res_ok_p")+'</p><div class="row"><a class="btn" href="#catalog">'+t("go_cat")+'</a><a class="btn" href="#mine">'+t("nav_mine")+'</a></div></div>';
+ resetForm();renderAll();showToast(t("t_pub"));
  box.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 
-/* ---------- review ---------- */
-function renderQueue(){
- $("#qn").textContent=S.queue.length;
- if(!S.queue.length){$("#queue").innerHTML='<p class="muted">'+t("rv_empty")+'</p>';return}
- $("#queue").innerHTML=S.queue.map(function(q){
-  var th=q.photos.length?q.photos.map(function(u){return '<img src="'+u+'" alt="">'}).join(""):'<div class="art">'+art(q.type,q.color)+'</div>';
-  return '<article class="qitem"><div><div class="thumbs">'+th+'</div>'+(q.photos.length?'':'<p class="note" style="margin-top:8px">'+t("no_photos")+'</p>')+'</div><div class="qinfo">'+
-  '<h3>'+ttl(q)+(q.example?' <span class="badge ex">'+t("rv_ex")+'</span>':'')+'</h3>'+
-  '<p class="meta">'+esc(q.size)+' · '+t("cond_"+q.cond)+' · '+cityName(q.city)+' · '+money(q.price)+'</p>'+
-  (q.desc?'<div><p class="mono muted" style="margin-bottom:4px">'+t("f_desc")+'</p><p class="desc">'+esc(q.desc)+'</p></div>':'')+
-  '<div><p class="mono muted" style="margin-bottom:6px">'+t("m_score")+' '+q.score+'%</p>'+meter(q.score)+'</div>'+
-  '<div><p class="mono muted" style="margin-bottom:4px">'+t("rv_notes")+'</p><ul>'+q.reasons.map(function(r){return '<li>'+t(r)+'</li>'}).join("")+'</ul></div>'+
-  '<div class="qact"><button class="btn primary" data-act="approve" data-qid="'+q.id+'">'+t("approve")+'</button><button class="btn" data-act="reject" data-qid="'+q.id+'">'+t("reject")+'</button></div></div></article>';
- }).join("");
+
+/* ---------- consent ---------- */
+function policyParas(){return [1,2,3,4,5,6].map(function(i){return '<p>'+esc(t("cs_p"+i))+'</p>'}).join("")}
+function setGate(on){
+ $("#consent").hidden=!on;
+ ["header.top","main","footer"].forEach(function(q){var el=$(q);if(el)el.inert=on});
+ if(on){$("#csBox").checked=false;$("#csBtn").disabled=true;$("#csLink").focus()}
+}
+function initConsent(){
+ if(lsGet("rw-consent")==="1"){S.consentAt=+lsGet("rw-consent-at")||Date.now();return}
+ setGate(true);
+}
+
+/* ---------- registration ---------- */
+var DB=null;
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function gateHTML(){return '<p class="muted">'+t("au_need")+'</p><button class="btn primary" style="margin-top:10px" type="button" data-login>'+t("login")+'</button>'}
+function regionName(r){return r==="pmr"?t("pmr"):t("rg_md")}
+function maskNum(n){return "+373 •••••"+n.slice(-3)}
+function normPhone(v){
+ var d=String(v).replace(/\D/g,"");
+ if(d.length===11&&d.indexOf("373")===0)d=d.slice(3);
+ else if(d.length===9&&d.charAt(0)==="0")d=d.slice(1);
+ if(/^77\d{6}$/.test(d))return {num:d,region:"pmr"};
+ if(/^(6\d|7[89])\d{6}$/.test(d))return {num:d,region:"md"};
+ return null;
+}
+function regionOf(raw){
+ var d=String(raw).replace(/\D/g,"");
+ if(d.indexOf("373")===0)d=d.slice(3);else if(d.charAt(0)==="0")d=d.slice(1);
+ if(/^77/.test(d))return "pmr";
+ if(/^(6|7[89])/.test(d))return "md";
+ return "";
+}
+function regionHint(raw){var r=regionOf(raw);return r?t("au_region",{r:regionName(r)}):t("au_phone_hint")}
+function genCode(){return String(Math.floor(100000+Math.random()*900000))}
+function hashPhone(ph){
+ var str="rewear:"+ph;
+ if(window.crypto&&window.crypto.subtle&&window.TextEncoder){
+  return window.crypto.subtle.digest("SHA-256",new TextEncoder().encode(str)).then(function(b){
+   return Array.prototype.map.call(new Uint8Array(b),function(x){return ("0"+x.toString(16)).slice(-2)}).join("").slice(0,32);
+  });
+ }
+ var h=5381;for(var i=0;i<str.length;i++)h=((h<<5)+h+str.charCodeAt(i))>>>0;
+ return Promise.resolve("x"+h.toString(16));
+}
+async function accGet(key){
+ if(DB){try{var snap=await DB.doc("accounts/"+key).get();if(snap.exists)return snap.data()}catch(e){}}
+ var raw=lsGet("rw-acc-"+key);
+ if(raw){try{return JSON.parse(raw)}catch(e){}}
+ return null;
+}
+async function accPut(key,acc){
+ lsSet("rw-acc-"+key,JSON.stringify(acc));
+ if(DB){try{await DB.doc("accounts/"+key).set(acc)}catch(e){}}
+}
+function updateAcct(){
+ $("#acct").innerHTML=S.user?'<span class="who">'+esc(S.user.name)+'</span><button class="btn" id="logout" type="button">'+t("logout")+'</button>':'<button class="btn primary" type="button" data-login>'+t("login")+'</button>';
+ $("#sellGate").hidden=!!S.user;
+}
+function phoneField(a){
+ var raw=a.phoneRaw||"";
+ return '<label class="field"><span>'+t("au_phone")+'</span><div class="phone"><span class="pre">+373</span><input id="auPhone" type="text" inputmode="numeric" autocomplete="tel-national" maxlength="20" placeholder="6X XXX XXX" value="'+esc(raw)+'"></div></label><p class="note" id="auRegion">'+regionHint(raw)+'</p>';
+}
+function authHTML(){
+ var a=S.auth||{mode:"reg"},err=a.err?'<p class="err" role="alert">'+t(a.err)+'</p>':'<p class="err"></p>';
+ if(a.mode==="code"){
+  return '<h2>'+t("au_code_t")+'</h2><p class="muted" style="margin-top:6px">'+t("au_code_p",{p:maskNum(a.num)})+'</p><form class="authform" data-auth="code"><p class="demo">'+t("au_demo",{c:a.code})+'</p><label class="field"><span>'+t("au_code_ph")+'</span><input id="auCode" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label>'+err+'<button class="btn primary" type="submit">'+t("au_code_btn")+'</button><div class="qact"><button class="btn" type="button" data-act="resend">'+t("au_resend")+'</button><button class="btn" type="button" data-act="aback">'+t("au_back")+'</button></div></form>';
+ }
+ var reg=a.mode!=="login";
+ var tabs='<div class="seg" style="margin:10px 0 4px"><button type="button" data-act="authtab" data-m="reg" aria-pressed="'+reg+'">'+t("register")+'</button><button type="button" data-act="authtab" data-m="login" aria-pressed="'+!reg+'">'+t("login")+'</button></div>';
+ if(reg)return '<h2>'+t("register")+'</h2>'+tabs+'<p class="note">'+t("au_why")+'</p><form class="authform" data-auth="reg"><label class="field"><span>'+t("au_name")+'</span><input id="auName" type="text" autocomplete="name" maxlength="40" value="'+esc(a.name||"")+'"></label>'+phoneField(a)+err+'<button class="btn primary" type="submit">'+t("au_reg_btn")+'</button></form>';
+ return '<h2>'+t("login")+'</h2>'+tabs+'<form class="authform" data-auth="login">'+phoneField(a)+err+'<button class="btn primary" type="submit">'+t("au_reg_btn")+'</button></form>';
+}
+function openAuth(cb){
+ S.afterAuth=cb||null;S.auth={mode:"reg"};
+ if($("#overlay").hidden)openModal(authHTML);else setModal(authHTML);
+}
+function requireAuth(cb){if(S.user)cb(false);else openAuth(function(){cb(true)})}
+function finishAuth(key,acc,silent){
+ var id="u"+key.slice(0,12);
+ S.user={id:id,key:key,name:acc.name,region:acc.region,mask:acc.mask};
+ if(!SELLERS[id])SELLERS[id]={name:acc.name,sum:0,count:0};
+ lsSet("rw-session",key);
+ updateAcct();renderAll();
+ if(silent)return;
+ S.auth=null;var cb=S.afterAuth;S.afterAuth=null;
+ closeModal();showToast(t("au_welcome",{n:acc.name}));
+ if(cb)cb();
+}
+async function authSubmit(kind){
+ if(kind==="code")return verifyCode();
+ var a=S.auth||(S.auth={mode:kind}),raw=$("#auPhone").value;
+ a.phoneRaw=raw;a.mode=kind;
+ if(kind==="reg"){a.name=$("#auName").value.trim();if(a.name.length<2){a.err="au_err_name";setModal(authHTML);return}}
+ var ph=normPhone(raw);
+ if(!ph){a.err="au_err_ph";setModal(authHTML);return}
+ var key=await hashPhone(ph.num),ex=await accGet(key);
+ if(kind==="reg"&&ex){a.err="au_err_dup";setModal(authHTML);return}
+ if(kind==="login"&&!ex){a.err="au_err_nouser";setModal(authHTML);return}
+ S.auth={mode:"code",kind:kind,name:kind==="reg"?a.name:ex.name,phoneRaw:raw,num:ph.num,region:ph.region,key:key,acc:ex,code:genCode(),tries:0,sends:1,locked:false,err:""};
+ setModal(authHTML);
+ var c=$("#auCode");if(c)c.focus();
+}
+async function verifyCode(){
+ var a=S.auth,v=$("#auCode").value.trim();
+ if(a.locked){a.err="au_err_lock";setModal(authHTML);return}
+ if(v!==a.code){
+  a.tries++;
+  if(a.tries>=3){if(a.sends>=5){a.locked=true;a.err="au_err_lock"}else{a.sends++;a.code=genCode();a.tries=0;a.err="au_err_code3"}}
+  else a.err="au_err_code";
+  setModal(authHTML);return;
+ }
+ var acc=a.acc;
+ if(a.kind==="reg"){
+  acc={name:a.name,region:a.region,mask:maskNum(a.num),createdAt:Date.now(),consentAt:S.consentAt||Date.now()};
+  await accPut(a.key,acc);
+ }
+ finishAuth(a.key,acc,false);
+}
+function doLogout(){
+ S.user=null;S.chats={};S.order=null;S.afterAuth=null;lsSet("rw-session","");
+ if(!$("#overlay").hidden)closeModal();
+ updateAcct();renderAll();showToast(t("au_bye"));
+}
+async function restoreSession(){
+ if(S.user)return;
+ var key=lsGet("rw-session");if(!key)return;
+ var acc=await accGet(key);
+ if(acc&&!S.user)finishAuth(key,acc,true);
+}
+function initDb(){
+ try{if(window.claude&&typeof window.claude.use==="function")window.claude.use("db").then(function(d){DB=d;restoreSession()},function(){})}catch(e){}
 }
 
 /* ---------- favorites, my listings ---------- */
-function renderAll(){renderCatalog();renderFavs();renderMine();renderQueue();renderChats()}
+function renderAll(){renderCatalog();renderFavs();renderMine();renderChats()}
 function toggleFav(id){
  var i=S.favs.indexOf(id);
  if(i>-1)S.favs.splice(i,1);
@@ -732,19 +875,17 @@ function renderFavs(){
  $("#favgrid").innerHTML=list.map(card).join("")||'<p class="muted">'+t("favs_empty")+'</p>';
 }
 function renderMine(){
- var mine=S.products.filter(function(p){return p.seller==="me"}).sort(function(a,b){return b.id-a.id});
- var pend=S.queue.filter(function(q){return q.seller==="me"});
+ if(!S.user){$("#mineSum").hidden=true;$("#mine").innerHTML=gateHTML();return}
+ $("#mineSum").hidden=false;
+ var mine=S.products.filter(function(p){return p.seller===me()}).sort(function(a,b){return b.id-a.id});
  var act=mine.filter(function(p){return !p.sold}).length,sold=mine.length-act;
- $("#mineSum").innerHTML='<p class="mono muted">'+t("mine_rating")+'</p><p class="big">'+ratingText("me")+'</p><p class="note">'+t("st_active")+': '+act+' · '+t("st_sold")+': '+sold+' · '+t("st_review")+': '+pend.length+'</p>';
- var rows=pend.map(function(q){
-  return '<article class="mrow">'+thumb(q)+'<div class="minfo"><span class="badge ex">'+t("st_review")+'</span><h3>'+ttl(q)+'</h3><p class="meta">'+t("pr_buyer")+': '+money(buyer(q.price))+'</p><div class="mact"><button class="btn" data-act="withdraw" data-id="'+q.id+'">'+t("withdraw")+'</button></div></div></article>';
- });
- rows=rows.concat(mine.map(function(p){
+ $("#mineSum").innerHTML='<p class="mono muted">'+t("mine_rating")+'</p><p class="big">'+ratingText(me())+'</p><p class="note">'+t("st_active")+': '+act+' · '+t("st_sold")+': '+sold+'</p><p class="note">✓ '+t("mine_phone",{p:S.user.mask+" · "+regionName(S.user.region)})+'</p>';
+ var rows=mine.map(function(p){
   var badge=p.sold?'<span class="badge sd">'+t("st_sold")+'</span>':'<span class="badge ok">'+t("st_active")+'</span>';
   var acts=p.sold?'<button class="btn" data-act="relist" data-id="'+p.id+'">'+t("relist")+'</button>':'<input class="pin" id="pin'+p.id+'" type="number" min="1" inputmode="numeric" value="'+p.price+'" aria-label="MDL"><button class="btn" data-act="saveprice" data-id="'+p.id+'">'+t("pr_save")+'</button><button class="btn" data-act="sold" data-id="'+p.id+'">'+t("mark_sold")+'</button>';
   acts+='<button class="btn" data-act="del" data-id="'+p.id+'">'+t(S.delAsk===p.id?"takedown_ask":"takedown")+'</button>';
   return '<article class="mrow">'+thumb(p)+'<div class="minfo">'+badge+'<h3>'+ttl(p)+'</h3><p class="meta">'+esc(p.size)+' · '+t("cond_"+p.cond)+' · '+cityName(p.city)+'</p><p class="meta">'+t("pr_buyer")+': '+money(buyer(p.price))+' · '+t("pr_you")+': '+money(p.price)+'</p><div class="mact">'+acts+'</div></div></article>';
- }));
+ });
  $("#mine").innerHTML=rows.length?rows.join(""):'<p class="muted">'+t("mine_empty")+'</p>';
 }
 function rateSeller(n){
@@ -790,6 +931,7 @@ function sendMsg(id,text,key){
  },1300);
 }
 function renderChats(){
+ if(!S.user){$("#cn").hidden=true;$("#clist").innerHTML=gateHTML();return}
  var ids=Object.keys(S.chats).filter(function(k){return S.chats[k].msgs.length&&find(k)});
  ids.sort(function(a,b){var x=S.chats[a].msgs,y=S.chats[b].msgs;return y[y.length-1].ts-x[x.length-1].ts});
  var n=ids.filter(function(k){return S.chats[k].unread>0}).length;
@@ -803,7 +945,7 @@ function renderChats(){
 /* ---------- misc ---------- */
 var toastT;
 function showToast(m){var el=$("#toast");el.textContent=m;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},2600)}
-var VIEWS=["catalog","sell","mine","favs","chats","how","review"];
+var VIEWS=["catalog","sell","mine","favs","chats","how"];
 function route(){
  var h=location.hash.slice(1);if(VIEWS.indexOf(h)<0&&h!=="grid-top")h="catalog";
  var v=h==="grid-top"?"catalog":h;
@@ -813,7 +955,7 @@ function route(){
 }
 
 /* ---------- events ---------- */
-$("#langSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;L=LANGS.indexOf(b.dataset.lang);try{localStorage.setItem("rw-lang",b.dataset.lang)}catch(x){}applyI18n()});
+["#langSeg","#csLang"].forEach(function(sel){$(sel).addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;L=LANGS.indexOf(b.dataset.lang);try{localStorage.setItem("rw-lang",b.dataset.lang)}catch(x){}applyI18n()})});
 $("#themeSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;document.documentElement.setAttribute("data-theme",b.dataset.theme);try{localStorage.setItem("rw-theme",b.dataset.theme)}catch(x){}$$("#themeSeg button").forEach(function(c){c.setAttribute("aria-pressed",String(c===b))})});
 $("#curSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;CUR=b.dataset.cur;S.fmin=0;S.fmax=0;$("#fMin").value="";$("#fMax").value="";try{localStorage.setItem("rw-cur",CUR)}catch(x){}applyI18n()});
 $("#q").addEventListener("input",function(e){S.q=e.target.value.trim();renderCatalog()});
@@ -831,14 +973,13 @@ $("#mine").addEventListener("click",function(e){
  if(a==="saveprice"&&p){var v=Math.round(parseFloat($("#pin"+id).value)||0);if(v>0){p.price=v;showToast(t("price_saved"));renderAll()}}
  else if(a==="sold"&&p){
   p.sold=true;S.delAsk=null;showToast(t("st_sold"));renderAll();
-  if(!p.rated){p.rated=true;setTimeout(function(){var n=Math.random()<0.3?4:5;SELLERS.me.sum+=n;SELLERS.me.count++;showToast(t("rated_me",{n:n}));renderAll()},1600)}
+  if(!p.rated){p.rated=true;var uid=me();setTimeout(function(){var n=Math.random()<0.3?4:5;if(SELLERS[uid]){SELLERS[uid].sum+=n;SELLERS[uid].count++}showToast(t("rated_me",{n:n}));renderAll()},1600)}
  }
  else if(a==="relist"&&p){p.sold=false;renderAll()}
  else if(a==="del"&&p){
   if(S.delAsk===id){S.products=S.products.filter(function(x){return x.id!==id});S.favs=S.favs.filter(function(x){return x!==id});S.delAsk=null;showToast(t("removed"))}else S.delAsk=id;
   renderAll();
  }
- else if(a==="withdraw"){S.queue=S.queue.filter(function(x){return x.id!==id});showToast(t("removed"));renderAll()}
 });
 $("#price").addEventListener("input",updatePrice);
 $$(".slot input").forEach(function(inp){inp.addEventListener("change",function(){
@@ -848,36 +989,34 @@ $$(".slot input").forEach(function(inp){inp.addEventListener("change",function()
 })});
 $("#form").addEventListener("submit",function(e){
  e.preventDefault();if(S.busy)return;
- var f={brand:$("#brand").value.trim(),type:$("#type").value,size:$("#size").value.trim(),cond:$("#cond").value,gender:$("#gender").value,city:$("#scity").value,price:parseFloat($("#price").value)||0,desc:$("#desc").value.trim(),photos:S.photos.slice(),demo:$("#demo").value};
- if(!f.size||f.price<=0||S.photos.some(function(p){return !p})){$("#err").textContent=t("err_fields");return}
- $("#err").textContent="";runCheck(f);
+ if(!S.user){openAuth(function(){$("#submit").click()});return}
+ var f={brand:$("#brand").value.trim(),type:$("#type").value,size:$("#size").value.trim(),cond:$("#cond").value,gender:$("#gender").value,city:$("#scity").value,price:parseFloat($("#price").value)||0,desc:$("#desc").value.trim(),photos:S.photos.slice()};
+ if(!f.size||f.price<=0||!S.photos[0]){$("#err").textContent=t("err_fields");return}
+ $("#err").textContent="";publishListing(f);
 });
 $("#modalBody").addEventListener("click",function(e){
  var b=e.target.closest("[data-act]");if(!b)return;var a=b.dataset.act;
  if(a==="fav"){toggleFav(+b.dataset.id);var fb=$("#favBtn");if(fb)fb.textContent=t(S.favs.indexOf(+b.dataset.id)>-1?"fav_del":"fav_add")}
  else if(a==="photo"){var mp=$("#mainPhoto");if(mp)mp.src=b.dataset.src}
  else if(a==="rate"){rateSeller(+b.dataset.n)}
- else if(a==="chat"){openChat(find(b.dataset.id),true)}
+ else if(a==="authtab"){S.auth={mode:b.dataset.m};setModal(authHTML)}
+ else if(a==="resend"){var A=S.auth;if(A.sends>=5){A.locked=true;A.err="au_err_lock"}else{A.sends++;A.code=genCode();A.tries=0;A.err=""}setModal(authHTML)}
+ else if(a==="aback"){S.auth={mode:S.auth.kind==="login"?"login":"reg",name:S.auth.name,phoneRaw:S.auth.phoneRaw};setModal(authHTML)}
+ else if(a==="chat"){var cid=b.dataset.id;requireAuth(function(fresh){openChat(find(cid),!fresh)})}
  else if(a==="quick"){sendMsg(S.chatOpen,t("cq"+b.dataset.i),"ca"+b.dataset.i)}
  else if(a==="toprod"){var pp=find(b.dataset.id);setModal(function(){return productHTML(pp)})}
- else if(a==="buy"){var p=find(b.dataset.id);setModal(function(){return checkoutHTML(p)})}
+ else if(a==="buy"){var p=find(b.dataset.id);requireAuth(function(fresh){var fn=function(){return checkoutHTML(p)};if(fresh)openModal(fn);else setModal(fn)})}
  else if(a==="pay"){
   var n=$("#coName").value.trim(),ph=$("#coPhone").value.trim();
   if(!n||ph.length<6){$("#coErr").textContent=t("co_err");return}
-  S.order={p:find(b.dataset.id),stage:0};setModal(trackerHTML);
+  S.pending={p:find(b.dataset.id),name:n,phone:ph,city:$("#coCity").value};setModal(payHTML);
  }
+ else if(a==="paydone"){S.order={p:S.pending.p,stage:0};S.pending=null;setModal(trackerHTML)}
+ else if(a==="paycancel"){var cp=find(b.dataset.id);setModal(function(){return checkoutHTML(cp)})}
  else if(a==="ship"){S.order.stage=1;setModal(trackerHTML)}
  else if(a==="recv"){S.order.stage=2;setModal(trackerHTML)}
  else if(a==="ok"){S.order.stage=3;S.order.p.sold=true;setModal(trackerHTML);renderAll()}
  else if(a==="bad"){S.order.stage=4;setModal(trackerHTML)}
-});
-$("#queue").addEventListener("click",function(e){
- var b=e.target.closest("[data-act]");if(!b)return;var id=+b.dataset.qid;
- var q=S.queue.filter(function(x){return x.id===id})[0];if(!q)return;
- S.queue=S.queue.filter(function(x){return x.id!==id});
- if(b.dataset.act==="approve"){S.products.push({id:++S.nextId,brand:q.brand,type:q.type,size:q.size,cond:q.cond,gender:q.gender,city:q.city,price:q.price,desc:q.desc,photos:q.photos,seller:q.seller,color:q.color,status:"expert",score:q.score});showToast(t("t_appr"))}
- else showToast(t("t_rej"));
- renderAll();
 });
 function fSync(){
  S.fg=$("#fGender").value;S.fs=$("#fSize").value.trim().toLowerCase();
@@ -886,14 +1025,28 @@ function fSync(){
 ["fGender"].forEach(function(i){$("#"+i).addEventListener("change",fSync)});
 ["fSize","fMin","fMax"].forEach(function(i){$("#"+i).addEventListener("input",fSync)});
 $("#fReset").addEventListener("click",function(){$("#fGender").value="all";["fSize","fMin","fMax"].forEach(function(i){$("#"+i).value=""});fSync()});
-$("#modalBody").addEventListener("submit",function(e){var f=e.target.closest("[data-chat]");if(!f)return;e.preventDefault();sendMsg(+f.dataset.chat,$("#chatInput").value)});
+$("#modalBody").addEventListener("submit",function(e){
+ var f=e.target.closest("[data-chat]");
+ if(f){e.preventDefault();sendMsg(+f.dataset.chat,$("#chatInput").value);return}
+ var au=e.target.closest("[data-auth]");if(!au)return;
+ e.preventDefault();authSubmit(au.dataset.auth);
+});
+document.addEventListener("click",function(e){
+ if(e.target.closest("[data-login]")){openAuth();return}
+ if(e.target.closest("#logout"))doLogout();
+});
 $("#clist").addEventListener("click",function(e){var r=e.target.closest(".crow");if(!r)return;openChat(find(r.dataset.chat),false)});
+$("#modalBody").addEventListener("input",function(e){if(e.target.id==="auPhone"){var n=$("#auRegion");if(n)n.textContent=regionHint(e.target.value)}});
+$("#csLink").addEventListener("click",function(){var open=$("#csText").hidden;$("#csText").hidden=!open;this.setAttribute("aria-expanded",String(open))});
+$("#csBox").addEventListener("change",function(){$("#csBtn").disabled=!this.checked});
+$("#csBtn").addEventListener("click",function(){if(!$("#csBox").checked)return;S.consentAt=Date.now();lsSet("rw-consent","1");lsSet("rw-consent-at",String(S.consentAt));setGate(false)});
+$("#csOpen").addEventListener("click",function(){openModal(function(){return '<h2>'+t("cs_title")+'</h2><div class="cstext" style="margin-top:12px;max-height:none">'+policyParas()+'</div>'})});
 $("#mclose").addEventListener("click",closeModal);
 $("#overlay").addEventListener("click",function(e){if(e.target.id==="overlay")closeModal()});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!$("#overlay").hidden)closeModal()});
 window.addEventListener("hashchange",route);
 
-applyI18n();route();
+applyI18n();route();initConsent();restoreSession();initDb();
 })();
 </script>
 
